@@ -1,0 +1,5 @@
+interface:
+  display_name: "Spike"
+  short_description: "Try a design as a measured patch"
+policy:
+  allow_implicit_invocation: false

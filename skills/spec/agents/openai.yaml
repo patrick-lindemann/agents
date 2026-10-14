@@ -1,0 +1,5 @@
+interface:
+  display_name: "Spec"
+  short_description: "Plan a feature as a spec"
+policy:
+  allow_implicit_invocation: false

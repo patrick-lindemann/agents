@@ -1,0 +1,5 @@
+interface:
+  display_name: "Write Down"
+  short_description: "Save the last report to specs/"
+policy:
+  allow_implicit_invocation: false
