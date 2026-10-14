@@ -2,28 +2,25 @@
 
 ## Names
 - Use complete words and only established abbreviations (`args`, `config`, `rng`,
-  `dtype`, `num_`); no single letters, also in comprehensions, except a lone type
-  parameter `T` and math symbols that follow their source (`R`, `x_t`).
-- Give one concept one name across the project, from the existing vocabulary; never
-  reuse a name for another concept; judge a name by what it suggests users may do.
+  `num_`), never single letters, even in comprehensions, except a lone type parameter `T`
+  and math symbols that follow their source (`R`, `x_t`).
+- Give each concept one name across the project, from the existing vocabulary, never
+  reused for another concept; judge a name by what it suggests users may do.
 - "path" means a `pathlib` path; an import path is a `qualified_name`, a position in a
-  nested config a `key`. Use `file_path`, `<what>_dir`, `outdir` for an output
-  directory option, and `<what>_root` for a directory others must stay under.
+  nested config a `key`. Use `file_path`, `<what>_dir`, `outdir` for an output directory
+  option, `<what>_root` for a directory others must stay under.
 - Name a caught exception `error`; a value passed on keeps its name.
 - Prefix with `_` what only its module or class uses; modules don't, except a helper
   module of its package (`cli/_args.py`).
-- Counts are `num_<things>`, limits `max_<…>`/`min_<…>`, indices `index`/`indices`.
-- A boolean asks about a state (`is_valid`, `has_header`), is `enable_<feature>` for a
-  setting, or names a flag's action (`overwrite`). Units go into the docstring
-  (`timeout`, "in seconds").
+- Counts are `num_<things>`, limits `max_<…>`/`min_<…>`, indices `index`/`indices`; a
+  boolean asks about a state (`is_valid`, `has_header`), is `enable_<feature>` for a
+  setting, or names a flag's action (`overwrite`).
 - Start functions with a verb (`fetch_user`), except properties and math maps (`exp`).
 - A base class names the role (`Sampler`), variants prefix their distinction
-  (`GreedySampler`). `*Options` is a frozen group of settings, `*Error` an exception.
-- A module owning one type or format is singular (`image.py`), one of variants plural
-  (`samplers/`).
+  (`GreedySampler`), their module is plural (`samplers/`), a module of one type or format
+  singular (`image.py`). `*Options` is a frozen group of settings, `*Error` an exception.
 - Constants for a config key, suffix, directory or file name end in `_KEY`, `_SUFFIX`,
-  `_DIR`, `_FILE`; a `Literal` alias's value set is its plural (`Mode`, `MODES`). Type
-  parameters are `T` plus meaning: `TConfig`, never `ConfigT`.
+  `_DIR`, `_FILE`. Type parameters are `T` plus meaning: `TConfig`, never `ConfigT`.
 - Data keys (metric names, failure reasons) are snake_case and say what they mean:
   `loss_diverged`, `request_timed_out`.
 - Use these forms only with their meaning:
@@ -34,7 +31,7 @@
   | `get_*`, `set_*` | a value that needs arguments, or a static accessor (`Clock.get_default()`) |
   | property, `cached_property` | a cheap value without arguments, or one computed once |
   | `@staticmethod` | belongs to the class but needs no instance |
-  | `from_*` | a `@classmethod` returning `Self`, building from other input |
+  | `from_*` | a `@classmethod` building `Self` from other input |
   | `is_*`, `has_*` | a predicate |
   | `validate_*` | check, raise, return `None`; paired with an `is_*` |
   | `make_*` | build a new object |
@@ -43,34 +40,33 @@
   | `resolve_*` | turn a reference into what it names |
 
 ## Types
-- Annotate every parameter and return, `-> None` included; a local only where the
-  checker cannot infer it (`rows: list[Row] = []`, `count: int = untyped_api.count()`,
+- Annotate every parameter and return, `-> None` included; a local only where the checker
+  cannot infer it (`rows: list[Row] = []`, `count: int = untyped_api.count()`,
   `reason: str | None`).
 - Add a type alias only for a reused type whose name adds meaning.
 - Annotate state shared by all instances `ClassVar[...]`, write it through the class
   (`Registry._entries = ...`), and comment why it is shared.
 - Write forward references unquoted, below Python 3.14 with
-  `from __future__ import annotations`. `TYPE_CHECKING` is banned; for a real import
-  cycle, use it with `# noqa: TID251`.
+  `from __future__ import annotations`. `TYPE_CHECKING` is banned, except with
+  `# noqa: TID251` for a real import cycle.
 - A `@contextmanager` returns `Generator[T]` from `collections.abc`
   (`Generator[T, None, None]` below 3.13); other generators `Iterator[T]`.
-- Give `Callable` its parameter types (`Callable[[Request], Response]`), unless truly
-  arbitrary. Use `Any` only for values the code does not constrain, never to silence
-  the checker, and `cast` only for a type the code guarantees but the checker cannot see.
+- Give `Callable` its parameter types (`Callable[[Request], Response]`) unless truly
+  arbitrary; use `Any` only for values the code does not constrain, `cast` only for a
+  type the code guarantees but the checker cannot see.
 
 ## Data structures
 - Write `from dataclasses import dataclass`, then `@dataclass(...)`. Prefer frozen
   dataclasses, copied with `dataclasses.replace`, carrying only methods of their data.
-- A hard-to-read return or element type (several `Any`, three or more slots, slots whose
-  types hide their meaning) becomes a private frozen dataclass; never a `NamedTuple` or
-  a positional tuple as a record.
+- A hard-to-read return or element type (several `Any`, three or more slots not unpacked
+  at once, slots whose types hide their meaning) becomes a private frozen dataclass; never
+  a `NamedTuple` or a positional tuple as a record.
 - A `TypedDict` has no behavior or defaults; defaults belong in the constructor.
 - A constant sequence is a tuple, a constant set a `frozenset`, a built-up one a `list`.
-- Name a reused `Literal` by a `type` alias with derived values; no `Enum` where a
-  `Literal` suffices: `type Mode = Literal["train", "eval"]`, then
-  `MODES: frozenset[Mode] = frozenset(get_args(Mode.__value__))`.
-- A missing value told apart from `None` is a private sentinel compared with `is`:
-  `_MISSING = object()`.
+- Name a reused `Literal` by a `type` alias, with its value set derived and named as its
+  plural; no `Enum` where a `Literal` suffices: `type Mode = Literal["train", "eval"]`,
+  then `MODES: frozenset[Mode] = frozenset(get_args(Mode.__value__))`.
+- Tell a missing value from `None` by a private sentinel and `is`: `_MISSING = object()`.
 - Choose by the first row that fits:
 
   | The data is | Use |
@@ -82,7 +78,7 @@
   | keys to values of one type | `dict[K, V]` |
   | a closed set of options | a `Literal` |
   | a table of per-item values for analysis | a `DataFrame` |
-  | two or three obvious slots unpacked at once: `lower, upper = bounds`, `quotient, remainder = divmod(a, b)` | a tuple |
+  | two or three obvious slots unpacked at once: `lower, upper = bounds` | a tuple |
   | named fields read as attributes | a frozen dataclass |
 
 ## Functions
@@ -97,13 +93,10 @@
 - Define no function inside another, except a decorator and a closure an API requires
   (`optimizer.step(closure)`). A callback is a bound method of the state's owner
   (`on_step=recorder.record`) or a module-level function; a short lambda may be passed.
-- Don't split a function with one job into helpers with one caller each.
-- Store the result of a call that does real work (a model, solver, query or service) in
-  a named variable before passing it on, so that it can be inspected in a debugger:
-  `predictions = model(batch)`, then `evaluate(predictions, labels)`. Cheap calls
-  (`len`, getters, conversions) stay inline.
-- Dispatch on a closed set with `match`, ending in a raising `case _:`. Merge dicts with
-  `|` and `|=`.
+- Name the result of real work (a model, solver, query or service call) before passing it
+  on, so that a debugger can inspect it: `predictions = model(batch)`, then
+  `evaluate(predictions, labels)`. Cheap calls (`len`, getters, conversions) stay inline.
+- Use `match` with a raising `case _:` for a closed set; merge dicts with `|`, `|=`.
 - Prefer `functools.cache` for a module-level pure function called repeatedly with the
   same hashable arguments; a method uses `cached_property`.
 - Stream results produced one at a time from a generator; the caller collects them.
@@ -112,17 +105,16 @@
   object that becomes current sets it in `__enter__`, resets it in `__exit__`.
 
 ## Classes
-- Declare every attribute a class owns, private too, typed in the class body; never
-  redeclare inherited ones.
+- Declare every attribute a class owns, typed in the class body, private ones too, and
+  never redeclare inherited ones. Kept state is private unless callers read it.
 - Order members: attributes (public, private); static methods, constructing class
   methods, static properties; `__init__`; abstract methods; properties; public methods;
   operators with logic (`__add__`, `__call__`); private methods; `__eq__`, `__repr__`.
-- Make each setting a keyword argument of `__init__`, with a default where one is
-  sensible, stored as a public attribute of the same name.
+- Make each setting a keyword argument of `__init__`, with a default where sensible,
+  stored as a public attribute of the same name.
 - A subclass takes only its own settings, passing its parent's on with `**kwargs: Any`;
   it changes a parent default with `kwargs.setdefault(...)`, calls `super().__init__`,
   then stores its own settings.
-- Kept state is private unless callers read it.
 - A base subclasses `ABC`; its public methods run the shared procedure and call private
   `@abstractmethod` hooks (body `...`): `run()` calls `_step()`.
 - A variant extends an inherited result by calling the parent first
@@ -142,20 +134,20 @@
 - Don't document code you did not write unless asked.
 - The summary is imperative with a period ("Load a config file."), alone or followed by
   every applicable section. Document an argument by its name alone.
-- State units, ranges and the meaning of `None` or the default where not obvious: "The
-  request timeout in seconds; `None` waits forever."
+- Put units in the docstring, not the name; state ranges and the meaning of `None` or the
+  default where not obvious: "The request timeout in seconds; `None` waits forever."
 - `Returns:` starts with the description; `Raises:` gives each expected error and its
   condition. Private functions get a docstring only where unclear.
 - A class docstring is one sentence of what it is ("A cache that evicts the least
   recently used entry.", not "Base class for all caches."). Document the constructor in
   `__init__` ("Initialize the cache."); an error class says which mistake it reports.
-- Attributes and dataclass fields get no docstrings, a public property one line, a
-  public constant one below it: `DEFAULT_TIMEOUT = 30.0`, then
+- Attributes and dataclass fields get no docstrings, a public property one line, a public
+  constant one below it: `DEFAULT_TIMEOUT = 30.0`, then
   `"""The request timeout in seconds when none is given."""`.
-- Comment only reasons the code cannot show, as a full sentence above the code, except
-  a terse label over a section of a long body or a short identity at the line's end;
-  never mention modules the code is independent of:
-  `# Checked before the first request, so that nothing is sent for an invalid config`.
+- Comment only reasons the code cannot show, as a full sentence above the code, except a
+  terse label over a section of a long body or a short identity at the line's end; never
+  mention modules the code is independent of:
+  `# Checked before the first request, so that nothing is sent for an invalid config`
 
 ## Errors
 - Write messages as full sentences that say what is wrong and how to fix it, with wrong
@@ -170,20 +162,19 @@
   `RuntimeError` for wrong state (`"The connection is closed."`), `NotImplementedError`.
 
 ## Modules and imports
-- A subpackage holds one area, a module one concept. Generic machinery knows nothing of
-  the concrete code's domain, formats or libraries.
-- `utils/` holds only homeless small helpers; import from its modules.
-- Imports point one way, entry points → features → utilities; shared internals move
-  down. Connectors to third-party services use the core's hooks; the core gains nothing
-  for one extension.
+- A subpackage holds one area, a module one concept, `utils/` only homeless small
+  helpers, imported from its modules. Generic machinery knows nothing of the concrete
+  code's domain, formats or libraries.
+- Imports point one way, entry points → features → utilities; shared internals move down.
+  Third-party connectors use the core's hooks; the core gains nothing for one extension.
 - A package `__init__.py` re-exports its public names in `__all__`, except `utils/`;
   modules define no `__all__`. An application's subpackage may export only main names
   (`from pkg.data import image`, then `image.resize(...)`).
 - Re-export a namespace of functions as a module, used qualified:
   `from pkg import stats`, then `stats.mean(...)`.
 - Import relatively within a subpackage, absolutely across (`from .image import Image`,
-  `from pkg.io import load_image`). Import frequent names directly (`Path`); keep
-  generic or colliding ones qualified (`np`, `pd`, `dataclasses.replace`).
+  `from pkg.io import load_image`). Import frequent names directly (`Path`); keep generic
+  or colliding ones qualified (`np`, `pd`, `dataclasses.replace`).
 - Import an optional dependency at the top of its module, in a `try` whose
   `except ImportError as error` raises an `ImportError` saying what to install.
 
@@ -195,13 +186,13 @@
   fitting third-party type (`PIL.Image.Image`) unwrapped.
 - Accept `Path | str` through the project's `PathLike`, converted once at the top:
   `file_path = resolve_path(file_path)`.
-- Write a file atomically: to a temporary file in the same directory, then
-  `Path.replace` it into place; delete the temporary file on any exception.
+- Write a file atomically: to a temporary file in the same directory, then `Path.replace`
+  it into place; delete the temporary file on any exception.
 
 ## Logging and security
 - Log through `logging.getLogger(__name__)`; library code never configures logging.
 - Parse YAML with `yaml.safe_load`; unpickle only files the project wrote. Pass
-  subprocesses an argument list, never `shell=True` with interpolated input. Keep
-  secrets out of code, configs, logs and messages; read them from the environment.
+  subprocesses an argument list, never `shell=True` with interpolated input. Keep secrets
+  out of code, configs, logs and messages; read them from the environment.
 - Fix what a linter or type checker reports; suppress only where the rule is wrong for
   that line, naming the rule (`# noqa: PLC0415` for an import that breaks a cycle).
