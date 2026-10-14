@@ -7,8 +7,7 @@
 ## Scope
 - Build on the existing code and its style, but write new code by these rules. Mention,
   don't change, what lies outside the task.
-- Make no unrequested refactors, renames, aliases or deprecation paths; keep the user's
-  unrelated changes.
+- Make no unrequested aliases or deprecation paths; keep the user's unrelated changes.
 - Port a reference faithfully, edge cases included; propose any deviation first, then
   document it.
 
@@ -30,7 +29,7 @@
 - Don't re-check documented shapes and ranges, `AGENTS.md` invariants or what the type
   checker proves, except a setting that would fail late in a long run: check it once at
   construction.
-- Raise a specific exception; never `assert` outside tests.
+- Never `assert` outside tests.
 
 ## Decisions
 - Protected: existing data and results (`data/`, `outputs/`, checkpoints, logs), vendored
@@ -57,6 +56,5 @@
   library and the existing ones, typing included.
 - Give a subagent its rule files, the commit rules and the protected paths; verify its
   claims.
-- Keep user docs (`README.md`, `docs/`) short, without a code tour or links to `specs/`;
-  update the docs of a language users write (config syntax, command line) in the same
-  commit as the change.
+- Keep user docs (`README.md`, `docs/`) short, without a code tour; update the docs of a
+  language users write (config syntax, command line) in the same commit as the change.

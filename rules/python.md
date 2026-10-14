@@ -21,52 +21,35 @@
   singular (`image.py`). `*Options` is a frozen group of settings, `*Error` an exception.
 - Constants for a config key, suffix, directory or file name end in `_KEY`, `_SUFFIX`,
   `_DIR`, `_FILE`. Type parameters are `T` plus meaning: `TConfig`, never `ConfigT`.
-- Data keys (metric names, failure reasons) are snake_case and say what they mean:
-  `loss_diverged`, `request_timed_out`.
-- Use these forms only with their meaning:
-
-  | Form | Meaning |
-  |---|---|
-  | `load_*`, `save_*` | read, write a file format |
-  | `get_*`, `set_*` | a value that needs arguments, or a static accessor (`Clock.get_default()`) |
-  | property, `cached_property` | a cheap value without arguments, or one computed once |
-  | `@staticmethod` | belongs to the class but needs no instance |
-  | `from_*` | a `@classmethod` building `Self` from other input |
-  | `is_*`, `has_*` | a predicate |
-  | `validate_*` | check, raise, return `None`; paired with an `is_*` |
-  | `make_*` | build a new object |
-  | `find_*` | search; `None` when nothing is found |
-  | `iter_*` | a generator |
-  | `resolve_*` | turn a reference into what it names |
+- Reserve `load_*`/`save_*` for reading and writing a file format, `get_*` for a value
+  that needs arguments or a static accessor (`Clock.get_default()`), `validate_*` for a
+  check that raises or returns `None`, paired with an `is_*`, `make_*` for building a new
+  object, `find_*` for a search that returns `None` when nothing is found, `iter_*` for a
+  generator and `resolve_*` for turning a reference into what it names.
 
 ## Types
 - Annotate every parameter and return, `-> None` included; a local only where the checker
   cannot infer it (`rows: list[Row] = []`, `count: int = untyped_api.count()`,
   `reason: str | None`).
 - Add a type alias only for a reused type whose name adds meaning.
-- Annotate state shared by all instances `ClassVar[...]`, write it through the class
-  (`Registry._entries = ...`), and comment why it is shared.
+- Annotate state shared by all instances `ClassVar[...]` and comment why it is shared.
 - Write forward references unquoted, below Python 3.14 with
-  `from __future__ import annotations`. `TYPE_CHECKING` is banned, except with
-  `# noqa: TID251` for a real import cycle.
-- A `@contextmanager` returns `Generator[T]` from `collections.abc`
-  (`Generator[T, None, None]` below 3.13); other generators `Iterator[T]`.
+  `from __future__ import annotations`.
+- A `@contextmanager` returns `Generator[T]`; other generators `Iterator[T]`.
 - Give `Callable` its parameter types (`Callable[[Request], Response]`) unless truly
   arbitrary; use `Any` only for values the code does not constrain, `cast` only for a
   type the code guarantees but the checker cannot see.
 
 ## Data structures
-- Write `from dataclasses import dataclass`, then `@dataclass(...)`. Prefer frozen
+- Prefer frozen
   dataclasses, copied with `dataclasses.replace`, carrying only methods of their data.
 - A hard-to-read return or element type (several `Any`, three or more slots not unpacked
   at once, slots whose types hide their meaning) becomes a private frozen dataclass; never
   a `NamedTuple` or a positional tuple as a record.
-- A `TypedDict` has no behavior or defaults; defaults belong in the constructor.
 - A constant sequence is a tuple, a constant set a `frozenset`, a built-up one a `list`.
 - Name a reused `Literal` by a `type` alias, with its value set derived and named as its
   plural; no `Enum` where a `Literal` suffices: `type Mode = Literal["train", "eval"]`,
   then `MODES: frozenset[Mode] = frozenset(get_args(Mode.__value__))`.
-- Tell a missing value from `None` by a private sentinel and `is`: `_MISSING = object()`.
 - Choose by the first row that fits:
 
   | The data is | Use |
@@ -83,8 +66,7 @@
 
 ## Functions
 - Don't force keyword-only parameters with `*`, except `kw_only=True` on a dataclass with
-  many or optional fields. Use `/` only where `**kwargs` could collide:
-  `def call(function: Callable[..., Any], /, *args: Any, **kwargs: Any)`.
+  many or optional fields.
 - Order parameters: subject, required inputs, options with defaults. An option whose
   default must be computed defaults to `None`, resolved in the body:
   `seed = secrets.randbits(63) if seed is None else seed`.
@@ -97,8 +79,6 @@
   on, so that a debugger can inspect it: `predictions = model(batch)`, then
   `evaluate(predictions, labels)`. Cheap calls (`len`, getters, conversions) stay inline.
 - Use `match` with a raising `case _:` for a closed set; merge dicts with `|`, `|=`.
-- Prefer `functools.cache` for a module-level pure function called repeatedly with the
-  same hashable arguments; a method uses `cached_property`.
 - Stream results produced one at a time from a generator; the caller collects them.
 - Put private helpers at module level, after the public functions that use them.
 - Keep process-wide current state in a module-level `ContextVar`, never a `global`; an
@@ -117,21 +97,13 @@
   then stores its own settings.
 - A base subclasses `ABC`; its public methods run the shared procedure and call private
   `@abstractmethod` hooks (body `...`): `run()` calls `_step()`.
-- A variant extends an inherited result by calling the parent first
-  (`result = super()._step(batch)`), and an inherited cleanup by calling it last.
-- Multiple inheritance adds interfaces or mixins to one base, `ABC` last:
-  `Classifier(Model, SerializableMixin, ABC)`. `@override` goes below `@property`,
-  `@classmethod`, `@cached_property`.
 - A class that holds a resource is a context manager: `__enter__` returns `Self`,
   `__exit__` takes three exception arguments and returns `Literal[False]`.
-- `__del__` only releases native resources and tolerates partial initialization:
-  `if "_handle" not in self.__dict__: return`.
 
 ## Docstrings and comments
 - Use Google style. State the contract concisely (inputs, result, errors), not the
   implementation; no notes, usage, examples or doctests, no module docstrings, no math
   markup. Backtick code and special values (`None`), in error messages too.
-- Don't document code you did not write unless asked.
 - The summary is imperative with a period ("Load a config file."), alone or followed by
   every applicable section. Document an argument by its name alone.
 - Put units in the docstring, not the name; state ranges and the meaning of `None` or the
@@ -157,9 +129,8 @@
 - Chain `from None` only when the original adds nothing but traceback, else `from error`.
 - A broad `except Exception` says why in a comment and re-raises or translates. Library
   code never catches only to log and go on.
-- Raise a library's own classes where errors reach its public API, elsewhere a builtin:
-  `ValueError`, `TypeError`, `KeyError`, `FileNotFoundError`, `FileExistsError`,
-  `RuntimeError` for wrong state (`"The connection is closed."`), `NotImplementedError`.
+- Raise a library's own classes where errors reach its public API, elsewhere a specific
+  builtin.
 
 ## Modules and imports
 - A subpackage holds one area, a module one concept, `utils/` only homeless small
@@ -189,10 +160,9 @@
 - Write a file atomically: to a temporary file in the same directory, then `Path.replace`
   it into place; delete the temporary file on any exception.
 
-## Logging and security
-- Log through `logging.getLogger(__name__)`; library code never configures logging.
+## Security and suppressions
 - Parse YAML with `yaml.safe_load`; unpickle only files the project wrote. Pass
   subprocesses an argument list, never `shell=True` with interpolated input. Keep secrets
   out of code, configs, logs and messages; read them from the environment.
-- Fix what a linter or type checker reports; suppress only where the rule is wrong for
-  that line, naming the rule (`# noqa: PLC0415` for an import that breaks a cycle).
+- Fix what a linter or type checker reports; suppress it only where its rule is wrong for
+  that line.
