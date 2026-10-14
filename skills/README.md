@@ -16,6 +16,7 @@ Only the user starts these, as `/<name>` in Claude Code.
 | `explain` | Explain an answer, spec, plan, code, research or session in plain technical English. |
 | `handoff` | Write the session into a file that a fresh agent can continue from. |
 | `spike` | Try a design as a throwaway patch and measure it. |
+| `setup-project` | Link the shared rules into a project by kind, and align its `AGENTS.md`, `CLAUDE.md` and tool settings. |
 | `write-down` | Save the current report, review, research or discussion to a file in `specs/`. |
 
 ## Model-invoked
@@ -29,11 +30,12 @@ The user, the model or another skill starts these.
 
 ## Conventions shared by all skills
 
-- **Rules.** The rules are in `~/agents/rules/`. `core.md` and `communication.md` apply
-  to every task, `git.md` to every commit, and each other file to the work its title
-  names (`python.md`, `tests.md`, `arrays.md`, …). Where a harness already loads them,
-  they are not read again. The skills point at a rule by file and section and do not
-  change the rules.
+- **Rules.** The rules are in `~/agents/rules/`. `communication.md` and `git.md` are
+  user-level and load in every session; `/setup-project` links `core.md`, `python.md`
+  and the modules that fit a project into its `.claude/rules/`, where Claude Code loads
+  them. A harness that loads neither reads `core.md`, `communication.md` and `git.md`
+  for every task, and each other file for the work its title names. The skills point at
+  a rule by file and section and do not change the rules.
 - **Files** go into the project's `specs/`, which is usually git-ignored and exists only
   in the main checkout.
 - **Tiers.** A subagent role names a tier and an effort, not a model:
@@ -69,14 +71,9 @@ The user, the model or another skill starts these.
 
 ## Installation
 
-Claude Code:
-
-```bash
-mkdir -p ~/.claude/skills
-for skill in ~/agents/skills/*/; do ln -s "${skill%/}" ~/.claude/skills/; done
-mkdir -p ~/.claude/agents
-ln -s ~/agents/.claude/agents/*.md ~/.claude/agents/
-```
+Claude Code: run `scripts/install.sh` once per machine, and again after adding or removing
+a skill or an agent. It links the user-level rules, every skill and every agent into
+`~/.claude/`.
 
 A user-invoked skill carries `disable-model-invocation: true` in its frontmatter for
 Claude Code, and `policy.allow_implicit_invocation: false` in `agents/openai.yaml` for
