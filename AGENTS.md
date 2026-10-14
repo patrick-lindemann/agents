@@ -30,6 +30,7 @@ with `core.md`, `python.md` and the user-level files. No module uses `paths:`.
   "…, so that it can be inspected in a debugger."
 - Write in plain, self-contained words, and make each rule checkable by a tool, a test
   or a concrete review criterion.
+- Keep each file under 200 lines, since longer files reduce adherence.
 
 **Examples:**
 - Put examples inline in backticks; a code block only where words fail, at most 6 lines.
@@ -50,25 +51,6 @@ with `core.md`, `python.md` and the user-level files. No module uses `paths:`.
   `skills/setup-project/templates/pyproject-tools.toml` lists what they enforce. Write
   nothing a model does by default; keep a line only if it answers an observed failure.
 - Keep maintainer notes in block `<!-- -->` comments, which Claude Code strips.
-
-**Budgets** (words, and under 200 lines each): `core.md` 520, `python.md` 1,700,
-`numerics.md` 600, `pytorch.md` 450, `cli.md` 450, `library.md` 350, `experiments.md`
-350, `tests.md` 300, `arrays.md` 300, `git.md` 300, `web.md` 200, `communication.md`
-200, a `SKILL.md` 700.
-
-## Checks
-
-After changing rules:
-
-```bash
-wc -w -l rules/*.md skills/*/SKILL.md
-grep -rnwE 'MUST|SHOULD|MAY' rules
-grep -rniE 'grasp|gripper|mesh|\bRAI\b|simulat|omegakit|omegaconf|DictConfig|full_key|se3|VPSDE|drift|lift' rules
-```
-
-The last grep finds nothing except `so3` examples in `numerics.md`. Try a changed rule
-on three tasks: one that follows it, one that tempts a violation, and one where rules
-compete.
 
 ## Git
 - The agent does not commit unless the user asks; the user pushes.
