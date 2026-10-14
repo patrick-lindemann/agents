@@ -104,10 +104,17 @@
 - Use Google style. State the contract concisely (inputs, result, errors), not the
   implementation; no notes, usage, examples or doctests, no module docstrings, no math
   markup. Backtick code and special values (`None`), in error messages too.
+- Write docstrings and comments as plain sentences, without semicolons: split joined
+  clauses into sentences.
 - The summary is imperative with a period ("Load a config file."), alone or followed by
-  every applicable section. Document an argument by its name alone.
-- Put units in the docstring, not the name; state ranges and the meaning of `None` or the
-  default where not obvious: "The request timeout in seconds; `None` waits forever."
+  every applicable section. What needs explaining goes into a paragraph between the
+  summary and the sections, never into an argument's entry.
+- Document an argument by its name alone, as short as possible: what it is, its unit,
+  range or format (`(w, x, y, z)`), and its default. Put units in the
+  docstring, not the name.
+- End the entry of an argument that has a default with "Defaults to <default>.", adding
+  what it means only where that is not obvious, in one short clause: "The request
+  timeout in seconds. Defaults to `None`, in which case it waits forever."
 - `Returns:` starts with the description; `Raises:` gives each expected error and its
   condition. Private functions get a docstring only where unclear.
 - A class docstring is one sentence of what it is ("A cache that evicts the least

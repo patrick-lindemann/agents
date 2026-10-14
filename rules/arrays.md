@@ -15,8 +15,8 @@
   devices win.
 - A shape string that ruff reads as a name (`"num_items"`, `F821`) gets a leading space
   (`" num_items"`) or `# noqa: F821`.
-- State shapes in words in `Args:` and `Returns:` even though the annotation carries
-  them: "The images with shape `(batch, height, width, 3)`."
+- State the shape in `Args:` and `Returns:` even though the annotation carries it,
+  always as a tuple of the axis names: "The images with shape `(batch, height, width, 3)`."
 
 ## Values
 - Use arrays that libraries return as they are; convert only where data is
