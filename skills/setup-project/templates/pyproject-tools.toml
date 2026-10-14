@@ -4,8 +4,11 @@
 #   ruff A: no shadowed builtins as names or modules; UP: modern annotation syntax for
 #   target-version; B905: zip(strict=); B904: raise ... from; PLC0415: top-level imports;
 #   T20: no print; G: no f-strings in logging; RUF005: unpacking over concatenation;
-#   RUF100: no unused noqa; TID251: no TYPE_CHECKING; reportImplicitOverride /
-#   explicit-override: @override; reportUnnecessaryTypeIgnoreComment: no stale ignores.
+#   RUF100: no unused noqa; PGH003, PGH004: suppressions name their rule; UP035, UP043:
+#   collections.abc and default type arguments; TID251: no TYPE_CHECKING, except a cycle;
+#   reportImplicitOverride / explicit-override: @override; reportUnnecessaryTypeIgnoreComment:
+#   no stale ignores. The type checker also rejects TypedDict defaults and methods, and
+#   writing a ClassVar through an instance.
 
 [project]
 requires-python = ">=3.12"  # the lowest supported version; an application may pin one minor: ">=3.13,<3.14"
