@@ -44,10 +44,13 @@ area the idea touches.
    would have to ask, or when the user ends the interview.
 
 4. **Form.** Pick the form by size and name it to the user:
-   - a small change: one file, `specs/<topic>.md`, from `templates/small-spec.md`;
+   - a small change: one file, `specs/<topic>.md`, from
+     `~/.claude/skills/spec/templates/small-spec.md`;
    - a large effort: a folder `specs/<topic>/` with `overview.md` from
-     `templates/overview.md`, and one `stages/<n>-<name>/concept.md` per stage from
-     `templates/stage-concept.md`. The overview lists the stages and their goals.
+     `~/.claude/skills/spec/templates/overview.md`, and one
+     `stages/<n>-<name>/concept.md` per stage from
+     `~/.claude/skills/spec/templates/stage-concept.md`. The overview lists the stages
+     and their goals.
 
    Done when the user has the form and, for a folder, the list of stages.
 

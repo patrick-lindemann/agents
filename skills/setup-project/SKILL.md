@@ -12,10 +12,10 @@ follow every change in `~/agents`.
 
 Arguments: the modules to link. Without them, propose modules from the project.
 
-The script is `scripts/link-rules.sh` in the repository that holds this skill:
-`"$(realpath ~/.claude/skills/setup-project)/../../scripts/link-rules.sh"`. Its
-`--list` lists the modules. `core.md` and `python.md` are always linked;
-`communication.md` and `git.md` are user-level and never linked here.
+The script, in the repository that holds this skill, is
+`"$(realpath ~/.claude/skills/setup-project)/../../scripts/link-rules.sh"`. Its `--list`
+lists the modules. `core.md` and `python.md` are always
+linked; `communication.md` and `git.md` are user-level and never linked here.
 
 ## Steps
 
@@ -40,19 +40,21 @@ The script is `scripts/link-rules.sh` in the repository that holds this skill:
    the links out of git through `.git/info/exclude`. Done when its output lists every
    module and `git status` shows no `.claude/rules/` entries.
 
-3. **AGENTS.md.** Compare the project's `AGENTS.md` with `templates/AGENTS.md`. The
-   rules refer to its slots: commands, invariants, protected, off-limits, legacy and
-   stable paths, and whether the agent commits. Propose what to fill in from the code,
-   and move into "Project rules" what the shared rules do not cover; drop what they now
-   say. Make `CLAUDE.md` contain only `@AGENTS.md`, after moving any other content of it
-   into `AGENTS.md`. Done when the user has agreed to the edits and they are applied.
+3. **AGENTS.md.** Compare the project's `AGENTS.md` with
+   `~/.claude/skills/setup-project/templates/AGENTS.md`. The rules refer to its slots:
+   commands, invariants, protected, off-limits, legacy and stable paths, and whether the
+   agent commits. Propose what to fill in from the code, and move into "Project rules"
+   what the shared rules do not cover; drop what they now say. Make `CLAUDE.md` contain
+   only `@AGENTS.md`, after moving any other content of it into `AGENTS.md`. Done when
+   the user has agreed to the edits and they are applied.
 
-4. **Tool settings.** Compare `pyproject.toml` with `templates/pyproject-tools.toml`.
-   The shared rules leave out what these settings enforce, so a missing ruff rule or
-   type checker option drops a convention silently. Propose the missing settings,
-   keeping the project's own where they are stricter, and run ruff and the type checker
-   once to show what the change reports. Fix nothing it reports without the user's
-   agreement. Done when the user has agreed to or rejected each setting.
+4. **Tool settings.** Compare `pyproject.toml` with
+   `~/.claude/skills/setup-project/templates/pyproject-tools.toml`. The shared rules
+   leave out what these settings enforce, so a missing ruff rule or type checker option
+   drops a convention silently. Propose the missing settings, keeping the project's own
+   where they are stricter, and run ruff and the type checker once to show what the
+   change reports. Fix nothing it reports without the user's agreement. Done when the
+   user has agreed to or rejected each setting.
 
 5. **Approval.** Tell the user that the linked rules load only after they approve
    external imports in the dialog at the start of the next interactive session in this

@@ -13,10 +13,11 @@ Argument: what the next session is for. Tailor the file to it.
 
 ## Steps
 
-1. **Collect** the items of `templates/handoff.md`: the goal, the state, the decisions
-   with the user's words, the open points, the next step, the skills the next session
-   should use, and the pointers. Point at specs, commits and files by path instead of
-   copying them. Done when each item is filled or marked "none".
+1. **Collect** the items of `~/.claude/skills/handoff/templates/handoff.md`: the goal,
+   the state, the decisions with the user's words, the open points, the next step, the
+   skills the next session should use, and the pointers. Point at specs, commits and
+   files by path instead of copying them. Done when each item is filled or marked
+   "none".
 
 2. **Write** the file to `specs/handoff/<date>-<topic>.md`, without secrets: no keys,
    passwords or tokens. Done when the file exists and its path is in the chat.

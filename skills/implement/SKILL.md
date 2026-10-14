@@ -41,9 +41,10 @@ the project's `AGENTS.md` and the rules in `~/agents/rules/`.
 
 1. **Baseline.** Read the spec, the workplan, `core.md`, `communication.md` and
    `git.md`, the rule files for the code the stage touches, and the project's
-   `AGENTS.md` and `CLAUDE.md`. Create the report from `templates/stage-report.md`, or
-   continue the existing one. Run the project's checks. Done when each check command and
-   what it printed is in the report.
+   `AGENTS.md` and `CLAUDE.md`. Create the report from
+   `~/.claude/skills/implement/templates/stage-report.md`, or continue the existing one.
+   Run the project's checks. Done when each check command and what it printed is in the
+   report.
 
 2. **Packages.** For each package, in order, and only once the one before is finished:
    1. **Plan.** Start an `implementer` subagent (strong tier, medium effort). It reads

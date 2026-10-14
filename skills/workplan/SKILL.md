@@ -34,11 +34,12 @@ Read `core.md`, `communication.md` and `git.md` in `~/agents/rules/`, and the pr
    stages, goes back to the spec: tell the user to run `/spec` on it. Done when the user
    approves the breakdown.
 
-4. **Write.** Write the workplan from `templates/workplan.md`. Its "Rules for every
-   package" name the protected paths, the checks to run, and the commit rule of the
-   project's `AGENTS.md`: one commit per package where the agent may commit, otherwise
-   uncommitted. Add the risks and what is not in the plan. Done when the file exists:
-   `specs/<topic>/workplan.md`, or `specs/<topic>-workplan.md` beside a one-file spec.
+4. **Write.** Write the workplan from `~/.claude/skills/workplan/templates/workplan.md`.
+   Its "Rules for every package" name the protected paths, the checks to run, and the
+   commit rule of the project's `AGENTS.md`: one commit per package where the agent may
+   commit, otherwise uncommitted. Add the risks and what is not in the plan. Done when
+   the file exists: `specs/<topic>/workplan.md`, or `specs/<topic>-workplan.md` beside a
+   one-file spec.
 
 5. **Check.** Offer a critique. If the user accepts, call the Skill tool with "critique",
    naming the workplan and the focus "do the packages reach each stage's goal, and can
