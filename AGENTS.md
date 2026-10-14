@@ -51,7 +51,7 @@ with `core.md`, `python.md` and the user-level files. No module uses `paths:`.
   nothing a model does by default; keep a line only if it answers an observed failure.
 - Keep maintainer notes in block `<!-- -->` comments, which Claude Code strips.
 
-**Budgets** (words, and under 200 lines each): `core.md` 450, `python.md` 1,600,
+**Budgets** (words, and under 200 lines each): `core.md` 520, `python.md` 1,700,
 `numerics.md` 600, `pytorch.md` 450, `cli.md` 450, `library.md` 350, `experiments.md`
 350, `tests.md` 300, `arrays.md` 300, `git.md` 300, `web.md` 200, `communication.md`
 200, a `SKILL.md` 700.
