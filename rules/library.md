@@ -12,7 +12,7 @@
 - Give a public function with overloads or a generic return typing tests: modules in
   `tests/typing/` that the type checker reads and pytest does not run. A call that must
   be rejected carries its specific ignore, which fails as unnecessary once the call is
-  accepted: `parse("1")` beside `parse(1)  # pyright: ignore[reportArgumentType]`.
+  accepted: `parse("1")` beside `parse(1)  # ty: ignore[invalid-argument-type]`.
 
 ## Errors
 - Keep all error classes in one `errors.py` at the bottom of the import graph.

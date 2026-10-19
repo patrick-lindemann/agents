@@ -4,7 +4,7 @@
 
 ## Commands
 - Format and lint changed files: `uv run ruff format <paths>`, `uv run ruff check --fix <paths>`
-- Type check: `uv run <pyright | mypy | ty check>`
+- Type check: `uv run ty check`
 - Test: `uv run pytest` (fast: `uv run pytest -m "not slow"`)
 
 ## Layout

@@ -6,15 +6,16 @@
 #   T20: no print; G: no f-strings in logging; RUF005: unpacking over concatenation;
 #   RUF100: no unused noqa; PGH003, PGH004: suppressions name their rule; UP035, UP043:
 #   collections.abc and default type arguments; TID251: no TYPE_CHECKING, except a cycle;
-#   reportImplicitOverride / explicit-override: @override; reportUnnecessaryTypeIgnoreComment:
-#   no stale ignores. The type checker also rejects TypedDict defaults and methods, and
-#   writing a ClassVar through an instance.
+#   ty missing-override-decorator: @override; unused-ignore-comment,
+#   unused-type-ignore-comment: no stale ignores; blanket-ignore-comment: ignores name
+#   their rule. ty also rejects TypedDict defaults and methods, and writing a ClassVar
+#   through an instance.
 
 [project]
 requires-python = ">=3.12"  # the lowest supported version; an application may pin one minor: ">=3.13,<3.14"
 
 [dependency-groups]
-dev = ["pytest", "pytest-cov", "ruff"]  # plus the type checker
+dev = ["pytest", "pytest-cov", "ruff", "ty"]
 
 [tool.uv]
 default-groups = ["dev"]
@@ -47,22 +48,20 @@ tests = ["tests"]
 [tool.ruff.lint.flake8-tidy-imports.banned-api]
 "typing.TYPE_CHECKING".msg = "Restructure the import; for a real cycle add `# noqa: TID251`."
 
-# Type checker: one of the three blocks below. Check src and tests. A dependency without
-# type information gets ignore_missing_imports per module, never globally.
-[tool.pyright]
+# Type checker: ty, run as `uv run ty check`. Check src and tests. ty reads the Python
+# version from requires-python. A dependency without type information goes into
+# allowed-unresolved-imports by module ("<module>.**"), never globally.
+[tool.ty.src]
 include = ["src", "tests"]
-typeCheckingMode = "standard"
-reportImplicitOverride = "error"
-reportUnnecessaryTypeIgnoreComment = "error"
 
-# [tool.mypy]
-# files = ["src", "tests"]
-# strict = true
-# warn_unreachable = true
-# enable_error_code = ["explicit-override"]
+[tool.ty.analysis]
+allowed-unresolved-imports = []
 
-# [tool.ty.src]
-# include = ["src", "tests"]
+[tool.ty.rules]
+missing-override-decorator = "error"
+unused-ignore-comment = "error"
+unused-type-ignore-comment = "error"
+blanket-ignore-comment = "error"
 
 [tool.pytest.ini_options]
 # A project with jaxtyping appends "--jaxtyping-packages=<package>,beartype.beartype".
