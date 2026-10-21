@@ -71,6 +71,10 @@
 - Order parameters: subject, required inputs, options with defaults. An option whose
   default must be computed defaults to `None`, resolved in the body:
   `seed = secrets.randbits(63) if seed is None else seed`.
+- Pass required arguments by position and arguments that have a default by keyword:
+  `fetch_user(user_id, timeout=5.0, max_retries=3)`, not `fetch_user(user_id, 5.0, 3)`
+  or `fetch_user(user_id=user_id)`, except that required arguments may go by keyword
+  where their order is not obvious: `resize(image, width=640, height=480)`.
 - Take read-only parameters as abstract types (`Sequence`, `Mapping`), return concrete
   ones (`list`, `dict`). `**kwargs: Any` only passes settings on.
 - Define no function inside another, except a decorator and a closure an API requires
