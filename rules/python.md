@@ -117,9 +117,14 @@
   timeout in seconds. Defaults to `None`, in which case it waits forever."
 - `Returns:` starts with the description; `Raises:` gives each expected error and its
   condition. Private functions get a docstring only where unclear.
-- A class docstring is one sentence of what it is ("A cache that evicts the least
-  recently used entry.", not "Base class for all caches."). Document the constructor in
-  `__init__` ("Initialize the cache."); an error class says which mistake it reports.
+- Write no docstring that only restates the name, base class or signature, such as
+  `"""The config of an order."""` on `class OrderConfig(TypedDict)`. A docstring with
+  `Args:`, `Returns:` or `Raises:` keeps its summary line and documents every argument,
+  even where the entry only repeats the name (`user: The user.`), for consistency.
+- A class docstring, where one is needed, is one sentence of what it is ("A cache that
+  evicts the least recently used entry.", not "Base class for all caches."). Document
+  the constructor in `__init__` ("Initialize the cache."); an error class says which
+  mistake it reports.
 - Attributes and dataclass fields get no docstrings, a public property one line, a public
   constant one below it: `DEFAULT_TIMEOUT = 30.0`, then
   `"""The request timeout in seconds when none is given."""`.
