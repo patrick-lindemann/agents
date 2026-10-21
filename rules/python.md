@@ -13,8 +13,9 @@
 - Prefix with `_` what only its module or class uses; modules don't, except a helper
   module of its package (`cli/_args.py`).
 - Counts are `num_<things>`, limits `max_<…>`/`min_<…>`, indices `index`/`indices`; a
-  boolean asks about a state (`is_valid`, `has_header`), is `enable_<feature>` for a
-  setting, or names a flag's action (`overwrite`).
+  boolean usually asks about a state (`is_valid`, `has_header`), is `enable_<feature>`
+  for a setting, or names a flag's action (`overwrite`), and may also name the choice
+  plainly where that reads better (`outer_first`).
 - Start functions with a verb (`fetch_user`), except properties and math maps (`exp`).
 - A base class names the role (`Sampler`), variants prefix their distinction
   (`GreedySampler`), their module is plural (`samplers/`), a module of one type or format
