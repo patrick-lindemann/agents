@@ -109,6 +109,8 @@
 - Use Google style. State the contract concisely (inputs, result, errors), not the
   implementation; no notes, usage, examples or doctests, no module docstrings, no math
   markup. Backtick code and special values (`None`), in error messages too.
+- Follow a closing backtick with a space or punctuation, never a letter: "the
+  `$target` nodes", not "the `$target`s", which Sphinx reads as markup without an end.
 - Write docstrings and comments as plain sentences, without semicolons: split joined
   clauses into sentences.
 - The summary is imperative with a period ("Load a config file."), alone or followed by
