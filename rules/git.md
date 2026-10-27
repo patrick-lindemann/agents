@@ -12,6 +12,10 @@
   only them, so that nothing the user staged, such as a release, is committed.
 - Never amend, rebase, force-push, push, tag, merge or commit a release; these stay with
   the user.
+- Discard a change (`git restore`, `git checkout -- <path>`) only when it is your own
+  from this session or the user explicitly told you to; otherwise save it first with
+  `git diff -- <paths> > $S/<name>.patch` and name the patch in your report. Unstage
+  with `git restore --staged`.
 
 ## Branches
 - Give a large rewrite its own branch, and delete the code it replaces only there.
