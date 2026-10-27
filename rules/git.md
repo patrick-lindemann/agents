@@ -1,8 +1,8 @@
 # Git
 
 ## Commits
-- Commit only when the project's `AGENTS.md` or the user says so; otherwise leave the
-  work uncommitted and say what is ready.
+- Commit only when the project's `AGENTS.md`, the user or a skill the user started says
+  so; otherwise leave the work uncommitted and say what is ready.
 - Where you commit, end each work package with one commit, made once its checks pass.
 - Write the message as one short line in the imperative ("Reject empty uploads"),
   without body, bullet points or trailer.
@@ -10,12 +10,20 @@
 - Stage only the package's files with `git add <paths>`, never `git add -A` or
   `git add .`, and check before committing that `git diff --cached --name-only` lists
   only them, so that nothing the user staged, such as a release, is committed.
-- Never amend, rebase, force-push, push, tag, merge or commit a release; these stay with
-  the user.
+- Never amend, rebase, force-push, tag or merge; these stay with the user.
 - Discard a change (`git restore`, `git checkout -- <path>`) only when it is your own
   from this session or the user explicitly told you to; otherwise save it first with
   `git diff -- <paths> > $S/<name>.patch` and name the patch in your report. Unstage
   with `git restore --staged`.
+
+## Pushes and pull requests
+- Push only when the user tells you to or a skill the user started calls for it, never
+  by default.
+- Push with a plain `git push`, or `git push -u origin <branch>` for a new branch, and
+  only to a branch other than `main` or `master`; never with `--force`,
+  `--force-with-lease` or `--delete`, and never a tag.
+- Where you may push, open a pull request with `gh pr create`; never merge, approve or
+  close one.
 
 ## Branches
 - Give a large rewrite its own branch, and delete the code it replaces only there.
