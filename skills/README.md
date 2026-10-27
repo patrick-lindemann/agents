@@ -9,15 +9,15 @@ Only the user starts these, as `/<name>` in Claude Code.
 
 | Skill | What it does |
 |---|---|
-| `spec` | Plan a feature as a spec in `specs/`: interview, check the code, record the decisions. |
-| `workplan` | Split an approved spec into stages, work packages and acceptance criteria. |
-| `implement` | Implement a stage of a workplan, or a small spec, without asking, and report. |
+| `spec` | Plan work as a small, medium or big spec in `specs/`: check the code, interview, record the decisions. The size is an argument or chosen by the agent. |
+| `workplan` | Optional: split an approved medium or big spec into work packages for the user to approve first. |
+| `implement` | Implement an approved spec, or a stage of a big one, without asking, from its workplan or from packages it drafts itself; one review per stage, then decision prompts and a report. |
 | `revise` | Turn the user's review notes on agent-written code into fixes and lasting rules. |
 | `explain` | Explain an answer, spec, plan, code, research or session in plain technical English. |
-| `handoff` | Write the session into a file that a fresh agent can continue from. |
+| `handover` | Give the session as a prompt in the chat that a fresh agent can continue from; `file` also saves it. |
 | `spike` | Try a design as a throwaway patch and measure it. |
-| `setup-project` | Link the shared rules into a project by kind, and align its `AGENTS.md`, `CLAUDE.md` and tool settings. |
-| `write-down` | Save the current report, review, research or discussion to a file in `specs/`. |
+| `release` | Prepare a release: version, changelog, checks and commit, then the release pull request or the push and tag commands. |
+| `setup` | Link the shared rules into a project by kind, and align its `AGENTS.md`, `CLAUDE.md` and tool settings; on a project already set up, bring it up to date. |
 
 ## Model-invoked
 
@@ -27,11 +27,12 @@ The user, the model or another skill starts these.
 |---|---|
 | `critique` | Harsh, independent review by two reviewer agents that discuss their findings. |
 | `research` | Research papers, released code and documentation, cited, with a recommendation. |
+| `save` | Save the current report, review, research or discussion to a file in `specs/`, when the user asks. |
 
 ## Conventions shared by all skills
 
 - **Rules.** The rules are in `~/agents/rules/`. `communication.md` and `git.md` are
-  user-level and load in every session; `/setup-project` links `core.md`, `python.md`
+  user-level and load in every session; `/setup` links `core.md`, `python.md`
   and the modules that fit a project into its `.claude/rules/`, where Claude Code loads
   them. A harness that loads neither reads `core.md`, `communication.md` and `git.md`
   for every task, and each other file for the work its title names. The skills point at
@@ -54,8 +55,8 @@ The user, the model or another skill starts these.
 
   | Role | Used by | Tier | Effort | Tools |
   |---|---|---|---|---|
-  | `reviewer-strong` | `critique` | strong | high | read, search, commands, web; no edits |
-  | `reviewer-middle` | `critique`, and the critic in `implement` | middle | high | read, search, commands, web; no edits |
+  | `reviewer-strong` | `critique`, and the stage review in `implement` | strong | high | read, search, commands, web; no edits |
+  | `reviewer-middle` | `critique` | middle | high | read, search, commands, web; no edits |
   | `implementer` | `implement` | strong | medium | all |
   | `fact-finder` | `spec`, any skill | middle | medium | read, search |
   | `locator` | any skill | cheap | low | read, search |
