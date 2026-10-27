@@ -1,14 +1,14 @@
 ---
 name: critique
 description: "Harsh, independent review of a spec, workplan, diff, benchmark, report or research by two reviewer agents that discuss their findings. Use when the user asks for a critique, an independent review, reviewers, or a consensus. Not for a quick look at code."
-argument-hint: "<material> [reviewers=2] [rounds=2] [focus] | package"
+argument-hint: "<material> [reviewers=2] [rounds=2] [focus] | stage"
 ---
 
 Review material with independent reviewer agents, let them discuss their findings, check
-every claim, and report in the chat. No file changes.
+every claim, report in the chat, and put the decisions to the user. No file changes.
 
 Arguments: the material (a path, a diff range, or "this discussion"), and optionally the
-number of reviewers, the number of discussion rounds and a focus. The argument `package`
+number of reviewers, the number of discussion rounds and a focus. The argument `stage`
 runs the short form inside `implement` (see the last section).
 
 Read `core.md` and `communication.md` in `~/agents/rules/`.
@@ -66,8 +66,15 @@ Every reviewer reports findings in this form:
    6. the findings you rejected, with the reason;
    7. how the review was done: reviewers, tiers, rounds.
 
-   Done when the report is in the chat. A file is written only when the user runs
-   `/write-down`; say so in one line at the end.
+   Done when the report is in the chat. A file is written only when the user asks
+   for one, through the `save` skill; say so in one line at the end.
+
+6. **Decide.** When the user started the critique, ask the "What to decide" items with
+   AskUserQuestion: at most 4 per call, 2 to 4 options each, the recommendation first
+   with "(Recommended)" in its label and the reason in its description. Where no such
+   tool exists, the numbered table stands. When another skill started the critique,
+   leave the questions to that skill. Done when the user has answered, or the questions
+   are left to the calling skill.
 
 ## Rules for reviewers
 
@@ -78,12 +85,12 @@ Every reviewer reports findings in this form:
 - A finding against a decision of the user names the new information that reopens it.
 - Change no file.
 
-## Inside `implement` (`package`)
+## Inside `implement` (`stage`)
 
-One `reviewer-middle` (middle tier, high effort), no discussion. It reads the workplan,
-the package, the package's section of the report, and either the implementer's plan or the
-diff. On a plan, it checks the plan against the spec and the code. On a result, it checks
-that the package delivers what it names; bugs, code smells and breaches of the rules;
-and that every statement of the report holds in the code. Its findings, in the form
-above, go back to the coordinating agent of `implement` for the report, not into the
-chat.
+One `reviewer-strong` (strong tier, high effort), no discussion, once per stage. It reads
+the spec or the stage concept, the workplan if there is one; the report, which lists the
+packages; and the diff of the stage.
+It checks that the stage reaches its goal and each package delivers what it names; bugs,
+code smells and breaches of the rules; and that every statement of the report holds in
+the code. Each finding names its package. The findings, in the form above, go back to
+the coordinating agent of `implement` for the report, not into the chat.

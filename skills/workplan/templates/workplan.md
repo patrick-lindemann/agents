@@ -1,7 +1,7 @@
 # <Title>: workplan
 
-Status: <date>, <state>. The design is in [overview.md](overview.md) and the stage
-concepts.
+Status: <date>, <state>. The design is in <[overview.md](overview.md) and the stage
+concepts | [spec.md](spec.md)>.
 
 **The principle.** <Copied from the overview.>
 
@@ -10,6 +10,8 @@ work packages. A package states what it delivers and the criteria by which it is
 accepted.
 
 ## Stages
+
+<Big spec only; a medium spec has the one stage below.>
 
 | # | Stage | Goal | Needs |
 |---|---|---|---|
@@ -20,18 +22,18 @@ accepted.
 ## How to work with this plan
 
 - Branch: <the branch, and what it is created from>.
-- One package is one concern for one session. Before coding, the implementer reads the
-  concept, the package and the code it touches, and writes down the files, signatures
-  and tests it intends. That plan is critiqued, then implemented.
+- One package is one concern for one session. The implementer reads the concept, the
+  package and the code it touches, then builds it.
 - A package is accepted when each criterion is shown: the command that was run and what
   it printed.
-- Each stage has one report, `reports/stage-<n>.md`, kept current while working. After
-  each package a reviewer that did not write it checks it; each finding is recorded with
-  its response.
+- Each stage has one report, `reports/stage-<n>.md`, kept current while working. Once
+  every package of the stage is built, one reviewer that did not write it checks the
+  whole stage; each finding is recorded with its response.
 - Open questions inside a stage: the implementer stops and asks when the design looks
   wrong, a criterion cannot be met, or a step would touch a protected path. Otherwise it
   takes the conservative option and records it as taken without the user.
-- At the end of the stage the report opens with a summary, and the user reviews.
+- At the end of the stage the report opens with a summary, the points left to the user
+  are asked as decision prompts, and the user reviews.
 
 ## Rules for every package
 

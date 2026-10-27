@@ -15,7 +15,7 @@ Terms used throughout:
 |---|---|
 | `overview.md` | this file |
 | `stages/<n>-<name>/concept.md` | the design of stage <n> |
-| `workplan.md` | the packages of each stage, written by `workplan` |
+| `workplan.md` | the packages of each stage, written by `workplan`; optional |
 | `reports/stage-<n>.md` | the report of stage <n>, written by `implement` |
 
 ## Goal

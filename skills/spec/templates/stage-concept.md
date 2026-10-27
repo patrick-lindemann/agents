@@ -17,6 +17,10 @@ The shared design and the decisions are in [overview.md](../../overview.md).
 <The design of the stage: what it builds and how the parts fit. No full signatures;
 a short target shape only where a decision needs one.>
 
+## Done when
+
+<Acceptance criteria of the stage, each shown by a command and its output.>
+
 ## Open points
 
 <Questions not yet decided, each with the recommended answer. Empty before

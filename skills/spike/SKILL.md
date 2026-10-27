@@ -29,6 +29,5 @@ Argument: the design question.
 4. **Report** in the chat: the answer to the question, the numbers, and the alternatives
    that lost, each with the reason. Then save the patch and the script next to the spec,
    in the project's `specs/` (it exists only in the main checkout):
-   `specs/<topic>/<name>-spike.patch` and `specs/<topic>/<name>-checks.py`, or the same
-   names beside a one-file spec. Done when both files exist and their paths are in the
-   chat.
+   `specs/<topic>/<name>-spike.patch` and `specs/<topic>/<name>-checks.py`. Done when
+   both files exist and their paths are in the chat.

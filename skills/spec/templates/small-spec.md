@@ -1,29 +1,26 @@
-# <Title>
+# <Title>: spec
 
-Status: <date>, <state: draft | for review | approved>. <One sentence on what changed
-last.>
+Status: <date>, <state: draft | reviewed | approved>. Size: small. <One sentence on what
+changed last.>
 
 ## Problem
 
 <What is wrong or missing today, with the code cited by file and line.>
 
-## Decision
+## Decisions
 
-<What the user decided, with date and reason. The user's words apart from the agent's
-reading where they matter.>
-
-| # | Decision | Date | Reason |
-|---|---|---|---|
-| 1 | | | |
+| # | Decision | Date | Reason | Taken by |
+|---|---|---|---|---|
+| 1 | | | | the user: "<their words>" \| the agent, shown to the user |
 
 ## Target shape
 
 <Only where a decision needs it: a short sketch of the result, a few lines at most. No
 full signatures.>
 
-## Work package
+## Changes
 
-<What the change delivers, in one list.>
+<What the change delivers, in one list, with the files it touches.>
 
 ## Checked on a spike
 
@@ -38,6 +35,11 @@ user rejected.>
 ## Done when
 
 <Acceptance criteria, each shown by a command and its output.>
+
+## Review
+
+<The critique's findings, each with how it was settled: taken by the agent, decided by
+the user, or rejected with the reason.>
 
 ## Proposed by the agent, not decided
 
