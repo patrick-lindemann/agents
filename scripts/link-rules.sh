@@ -1,7 +1,8 @@
 #!/usr/bin/env bash
 # Link core.md, python.md and the given modules into <project>/.claude/rules/, and remove
-# links to modules no longer given. The links stay out of the project's git through
-# its .git/info/exclude, since they point into this machine's checkout.
+# links to modules no longer given or no longer existing. The links stay out of the
+# project's git through its .git/info/exclude, since they point into this machine's
+# checkout.
 #
 # Usage: link-rules.sh <project> [module ...]   e.g. link-rules.sh . tests arrays pytorch
 #        link-rules.sh --list                    list the modules
@@ -9,7 +10,7 @@ set -euo pipefail
 
 repo="$(cd "$(dirname "$(realpath "${BASH_SOURCE[0]}")")/.." && pwd)"
 always=(core python)
-user_level=(communication git)
+user_level=(communication git shell)
 
 modules() {
     local file name
@@ -44,7 +45,7 @@ mkdir -p "$rules_dir"
 
 for entry in "$rules_dir"/*.md; do
     [[ -L "$entry" && "$(readlink "$entry")" == "$repo"/* ]] || continue
-    if [[ " ${selected[*]} " != *" $(basename "$entry" .md) "* ]]; then
+    if [[ ! -e "$entry" || " ${selected[*]} " != *" $(basename "$entry" .md) "* ]]; then
         rm "$entry"
         echo "remove $entry"
     fi

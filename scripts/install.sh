@@ -30,7 +30,7 @@ prune() {
 
 mkdir -p "$claude_dir/rules" "$claude_dir/skills" "$claude_dir/agents"
 
-for rule in communication git; do
+for rule in communication git shell; do
     link "$repo/rules/$rule.md" "$claude_dir/rules/$rule.md"
 done
 for skill in "$repo"/skills/*/; do
