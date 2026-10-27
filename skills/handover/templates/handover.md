@@ -1,4 +1,7 @@
-# Handoff: <topic>
+# Handover: <topic>
+
+You continue work that an earlier session started. Read this, then the pointers, and
+start with the next step.
 
 Written <date>, from <project>, branch `<branch>` at `<commit>`. For: <what the next
 session is for>.
@@ -27,7 +30,7 @@ printed.>
 
 ## Skills for the next session
 
-<Which skills to run, such as `/implement specs/<topic>/workplan.md 2`.>
+<Which skills to run, such as `/implement specs/<topic> 2`.>
 
 ## Pointers
 
