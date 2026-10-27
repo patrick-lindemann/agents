@@ -16,6 +16,9 @@
   Stable, minimal wiring only: <…>
 - Formats: <…>
 - Git: <the agent commits each work package | the agent does not commit>; <branch model>
+- Releases: <by pull request from `develop` into `main` | directly on `main`>; release
+  candidates: <none | `v<version>-rc<N>` on `develop`, published to <where>>; tags:
+  <the user | CI, after the merge>; extra steps: <…>.
 
 ## Project rules
 - <conventions of this project only, and overrides of the shared rules>
