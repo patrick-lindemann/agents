@@ -11,7 +11,7 @@ definitions. Other places only link here.
 - `scripts/install.sh`: links the user-level rules, the skills and the agents into
   `~/.claude/`. Run again after adding or removing a skill or an agent.
 - `scripts/link-rules.sh <project> [module ...]`: links `core.md`, `python.md` and the
-  modules into a project's `.claude/rules/`; the `setup-project` skill drives it.
+  modules into a project's `.claude/rules/`; the `setup` skill drives it.
 - `specs/` (git-ignored): the old rule set and the review that replaced it.
 
 ## Writing rules
@@ -48,7 +48,7 @@ with `core.md`, `python.md` and the user-level files. No module uses `paths:`.
 - Admit a rule only if it holds in both an ML repository and a web service. A
   convention of one project goes into that project's `AGENTS.md`.
 - Write nothing that ruff, the type checker or the settings enforce;
-  `skills/setup-project/templates/pyproject-tools.toml` lists what they enforce. Write
+  `skills/setup/templates/pyproject-tools.toml` lists what they enforce. Write
   nothing a model does by default; keep a line only if it answers an observed failure.
 - Keep maintainer notes in block `<!-- -->` comments, which Claude Code strips.
 

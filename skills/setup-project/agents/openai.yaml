@@ -1,5 +1,0 @@
-interface:
-  display_name: "Setup project"
-  short_description: "Link the shared rules into a project"
-policy:
-  allow_implicit_invocation: false

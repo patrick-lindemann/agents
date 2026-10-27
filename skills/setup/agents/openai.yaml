@@ -1,0 +1,5 @@
+interface:
+  display_name: "Setup"
+  short_description: "Link the shared rules into a project, or update them"
+policy:
+  allow_implicit_invocation: false
