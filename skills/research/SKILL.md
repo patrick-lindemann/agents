@@ -60,6 +60,6 @@ can keep working. Write as `communication.md` in `~/agents/rules/` says.
    6. the references: arXiv links with version, code at a commit, section, table and
       figure numbers.
 
-   Done when the report is in the chat. A file is written only when the user runs
-   `/write-down`, by default to `specs/research/<topic>.md`; say so in one line at the
-   end.
+   Done when the report is in the chat. A file is written only when the user asks for
+   one, through the `save` skill, by default to `specs/research/<topic>.md`; say so in
+   one line at the end.

@@ -41,4 +41,4 @@ Write as `communication.md` in `~/agents/rules/` says.
    the user asks to be tested, ask one to three questions per round about the material
    and correct the answers. Done when the user says it is clear.
 
-A file is written only when the user runs `/write-down`.
+A file is written only when the user asks for one, through the `save` skill.

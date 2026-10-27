@@ -1,8 +1,7 @@
 ---
-name: write-down
-description: "Save the current report, review, research or discussion to a Markdown file in specs/."
+name: save
+description: "Save the current report, review, research or discussion to a Markdown file in specs/. Use when the user asks to save, write down or file something from the chat. Not on your own initiative."
 argument-hint: "[path] [what to write]"
-disable-model-invocation: true
 ---
 
 Save what was shown in the chat to a Markdown file in the project's `specs/`.
@@ -20,9 +19,9 @@ report, or the discussion since the last file was written.
 2. **Path.** A given path is relative to the project's `specs/` unless it is absolute.
    Without one:
    - a review: `specs/<topic>/review.md` if the topic has a folder, else
-     `specs/<topic>-review.md`, from `~/.claude/skills/write-down/templates/review.md`;
+     `specs/<topic>-review.md`, from `~/.claude/skills/save/templates/review.md`;
    - research: `specs/research/<topic>.md`, from
-     `~/.claude/skills/write-down/templates/research-note.md`;
+     `~/.claude/skills/save/templates/research-note.md`;
    - anything else: `specs/<topic>.md`.
 
    Done when the path is fixed.

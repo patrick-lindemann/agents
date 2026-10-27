@@ -1,0 +1,3 @@
+interface:
+  display_name: "Save"
+  short_description: "Save the last report to specs/"
