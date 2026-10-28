@@ -5,8 +5,8 @@ definitions. Other places only link here.
 
 ## Layout
 - `rules/`: one module per kind of code. `communication.md` and `git.md` are user-level;
-  `core.md` and `python.md` load in every Python project; the rest are linked per
-  project.
+  `core.md` and `python.md` are linked into every Python project; the rest are linked
+  per project.
 - `skills/`: skills, see `skills/README.md`. `.claude/agents/`: the subagent roles.
 - `bin/`: commands for the user, such as `claude-tmux`. `claude/statusline.sh`: the
   status line.
@@ -20,8 +20,10 @@ definitions. Other places only link here.
 
 ## Writing rules
 
-Every module linked into a project loads at the start of every session there, together
-with `core.md`, `python.md` and the user-level files. No module uses `paths:`.
+`core.md` and the user-level files load at the start of every session. The other
+modules start with `paths:` frontmatter, so that Claude Code loads one only when it
+reads a matching file, such as `**/*.py` for `python.md`. Give a new module `paths:`
+unless it is needed without any file at hand.
 
 **Structure:**
 - Write `# Title`, then `## Topic` sections. One module covers one kind of code.
