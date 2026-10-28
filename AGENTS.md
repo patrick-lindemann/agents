@@ -8,8 +8,10 @@ definitions. Other places only link here.
   `core.md` and `python.md` load in every Python project; the rest are linked per
   project.
 - `skills/`: skills, see `skills/README.md`. `.claude/agents/`: the subagent roles.
-- `scripts/install.sh`: links the user-level rules, the skills and the agents into
-  `~/.claude/`. Run again after adding or removing a skill or an agent.
+- `claude/statusline.sh`: the status line.
+- `scripts/install.sh`: links the user-level rules, the skills, the agents and the
+  status line into `~/.claude/`. Run again after adding or removing a skill or an
+  agent.
 - `scripts/link-rules.sh <project> [module ...]`: links `core.md`, `python.md` and the
   modules into a project's `.claude/rules/`; the `setup` skill drives it.
 - `specs/` (git-ignored): the old rule set and the review that replaced it.
