@@ -1,0 +1,87 @@
+#!/usr/bin/env bash
+# Run Claude in tmux: reattach a session that lost its tab in a disconnect, else start
+# a new one. Closing the tab ends its session. Losing the tab with VS Code keeps it.
+# `claude-tmux --prune` only ends idle sessions, for cron.
+
+# Serialize the choice, so that tabs restored together don't take the same session.
+# A fixed path, since cron has no `XDG_RUNTIME_DIR`.
+exec 9>"/tmp/claude-tmux-$UID.lock"
+flock 9
+
+now=$(date +%s)
+
+# End the sessions of every project that no tab shows and that printed nothing for
+# 7 days. A session claimed in the last 10 s is being attached by another tab.
+# `window_activity` is the last output, `session_activity` only the last key press.
+max_idle=$(( 7 * 24 * 3600 ))
+declare -A last_output=()
+while read -r name attached activity claimed; do
+    [[ $name =~ ^claude-.+-[0-9]+$ && $attached == 0 ]] || continue
+    (( now - ${claimed:-0} > 10 )) || continue
+    if (( activity > ${last_output[$name]:-0} )); then last_output[$name]=$activity; fi
+done < <(tmux list-windows -a -F '#{session_name} #{session_attached} #{window_activity} #{@claimed}' 2>/dev/null)
+for name in "${!last_output[@]}"; do
+    if (( now - last_output[$name] > max_idle )); then tmux kill-session -t "=$name"; fi
+done
+if [[ ${1-} == --prune ]]; then exit 0; fi
+
+dir=${PWD##*/}
+prefix="claude-${dir//[^A-Za-z0-9_-]/_}-"
+claude_bin=$(command -v claude) || { echo "claude-tmux: claude not found" >&2; exit 1; }
+
+# The VS Code extension host that owns this tab, if it runs in one.
+host_pid=""
+pid=$PPID
+while [[ $pid -gt 1 ]]; do
+    if tr '\0' ' ' < "/proc/$pid/cmdline" 2>/dev/null | grep -q -- '--type=extensionHost'; then
+        host_pid=$pid
+        break
+    fi
+    pid=$(ps -o ppid= -p "$pid" | tr -d ' ')
+done
+
+target=""
+max=0
+while read -r name attached claimed; do
+    [[ $name == "$prefix"* ]] || continue
+    number=${name#"$prefix"}
+    [[ $number =~ ^[0-9]+$ ]] || continue
+    if (( number > max )); then max=$number; fi
+    # A session claimed in the last 10 s is being attached by another tab.
+    if [[ -z $target && $attached == 0 ]] && (( now - ${claimed:-0} > 10 )); then
+        target=$name
+    fi
+done < <(tmux list-sessions -F '#{session_name} #{session_attached} #{@claimed}' 2>/dev/null)
+
+if [[ -z $target ]]; then
+    target="$prefix$((max + 1))"
+    # Closed for tmux, so that a server it starts doesn't hold the lock forever.
+    tmux new-session -d -s "$target" -c "$PWD" "$claude_bin" "$@" 9>&-
+    tmux set-option -t "=$target:" mouse on
+    tmux set-option -t "=$target:" status off
+fi
+tmux set-option -t "=$target:" @claimed "$now"
+exec 9>&-
+
+# The plugin closes a tab with SIGHUP. The client runs in the background so that the
+# signal interrupts `wait`. Without job control, it needs the terminal given explicitly.
+hung_up=0
+trap 'hung_up=1' HUP TERM
+exec 3<&0
+tmux attach-session -t "=$target" <&3 &
+client=$!
+wait "$client"
+if (( hung_up )); then
+    kill "$client" 2>/dev/null
+    wait "$client"
+fi
+
+# On a disconnect or when VS Code closes, the extension host exits within seconds.
+# If it is still alive after 20 s, the tab alone was closed.
+if (( hung_up )) && [[ -n $host_pid ]]; then
+    for _ in {1..20}; do
+        kill -0 "$host_pid" 2>/dev/null || exit 0
+        sleep 1
+    done
+    tmux kill-session -t "=$target" 2>/dev/null
+fi

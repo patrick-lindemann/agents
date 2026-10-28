@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # Link the user-level rules, skills, agents and status line of this repository into
-# ~/.claude/.
+# ~/.claude/, and its commands into ~/.local/bin/.
 # Run once per machine and again after adding or removing a skill or an agent.
 set -euo pipefail
 
@@ -29,9 +29,14 @@ prune() {
     done
 }
 
-mkdir -p "$claude_dir/rules" "$claude_dir/skills" "$claude_dir/agents"
+bin_dir="$HOME/.local/bin"
+
+mkdir -p "$claude_dir/rules" "$claude_dir/skills" "$claude_dir/agents" "$bin_dir"
 
 link "$repo/claude/statusline.sh" "$claude_dir/statusline.sh"
+for command in "$repo"/bin/*; do
+    link "$command" "$bin_dir/$(basename "$command")"
+done
 
 for rule in communication git shell; do
     link "$repo/rules/$rule.md" "$claude_dir/rules/$rule.md"
@@ -47,3 +52,4 @@ done
 prune "$claude_dir/rules"
 prune "$claude_dir/skills"
 prune "$claude_dir/agents"
+prune "$bin_dir"
