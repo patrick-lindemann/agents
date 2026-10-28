@@ -15,6 +15,7 @@ definitions. Other places only link here.
   adding or removing a skill, an agent or a command.
 - `scripts/link-rules.sh <project> [module ...]`: links `core.md`, `python.md` and the
   modules into a project's `.claude/rules/`; the `setup` skill drives it.
+- `docs/`: how the agent setup runs on a machine, such as `claude-code-setup.md`.
 - `specs/` (git-ignored): the old rule set and the review that replaced it.
 
 ## Writing rules
