@@ -1,0 +1,69 @@
+--- a/media/main.js
++++ b/media/main.js
+@@ -9630,6 +9630,8 @@
+       terminal.open(container);
+       const fileLinkProvider = new FileLinkProvider(terminal, id, this.postMessage.bind(this));
+       terminal.registerLinkProvider(fileLinkProvider);
++      terminal.attachCustomKeyEventHandler((event) => this.handleKeyEvent(terminal, event));
++      terminal.parser.registerOscHandler(52, (data) => this.handleClipboardWrite(data));
+       const entry = {
+         terminal,
+         fitAddon,
+@@ -9645,6 +9647,57 @@
+       this.state.set(id, entry);
+       return entry;
+     }
++    // Keys as in VS Code's terminal: xterm.js sends Shift+Enter as a plain CR, and
++    // Ctrl+C and Ctrl+V as control characters. Every event of a handled key returns
++    // false, so that the keypress of Enter doesn't send a CR after all.
++    handleKeyEvent(terminal, event) {
++      const isKeyDown = event.type === "keydown";
++      if (event.altKey || event.metaKey) {
++        return true;
++      }
++      if (event.key === "Enter" && event.shiftKey && !event.ctrlKey) {
++        if (isKeyDown) {
++          event.preventDefault();
++          terminal.input("\x1B\r");
++        }
++        return false;
++      }
++      if (event.ctrlKey && event.code === "KeyC" && (event.shiftKey || terminal.hasSelection())) {
++        if (isKeyDown && terminal.hasSelection()) {
++          event.preventDefault();
++          this.writeClipboard(terminal.getSelection());
++          terminal.clearSelection();
++        }
++        return false;
++      }
++      if (event.ctrlKey && event.code === "KeyV") {
++        if (isKeyDown) {
++          event.preventDefault();
++          navigator.clipboard.readText().then(
++            (text) => terminal.paste(text),
++            (error) => console.error("Failed to read the clipboard:", error)
++          );
++        }
++        return false;
++      }
++      return true;
++    }
++    // OSC 52 sets the clipboard, as tmux does for a copy. Queries (`?`) are ignored.
++    handleClipboardWrite(data) {
++      const payload = data.slice(data.indexOf(";") + 1);
++      if (payload !== "?") {
++        try {
++          const bytes = Uint8Array.from(atob(payload), (char) => char.charCodeAt(0));
++          this.writeClipboard(new TextDecoder().decode(bytes));
++        } catch (error) {
++          console.error("Invalid OSC 52 data:", error);
++        }
++      }
++      return true;
++    }
++    writeClipboard(text) {
++      navigator.clipboard.writeText(text).catch((error) => console.error("Failed to write the clipboard:", error));
++    }
+     switchToTerminal(id) {
+       this.state.forEach((t, tid) => {
+         t.element.style.display = tid === id ? "block" : "none";
