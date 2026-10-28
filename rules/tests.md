@@ -1,3 +1,8 @@
+---
+paths:
+  - "**/tests/**"
+  - "**/conftest.py"
+---
 # Tests
 
 ## Layout

@@ -1,3 +1,7 @@
+---
+paths:
+  - "**/*.py"
+---
 # Numerics
 
 ## Module structure

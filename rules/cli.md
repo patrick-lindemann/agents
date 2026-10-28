@@ -1,3 +1,10 @@
+---
+paths:
+  - "scripts/**"
+  - "**/_cli/**"
+  - "**/cli/**"
+  - "**/__main__.py"
+---
 # Scripts and command-line tools
 
 ## Scripts

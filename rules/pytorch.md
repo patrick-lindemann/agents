@@ -1,3 +1,7 @@
+---
+paths:
+  - "**/*.py"
+---
 # PyTorch
 
 ## Types and creation

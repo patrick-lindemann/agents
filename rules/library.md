@@ -1,3 +1,7 @@
+---
+paths:
+  - "src/**/*.py"
+---
 # Library
 
 ## Public API

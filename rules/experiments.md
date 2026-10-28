@@ -1,3 +1,8 @@
+---
+paths:
+  - "configs/**"
+  - "scripts/**"
+---
 # Experiments
 
 ## Configs and seeds
