@@ -29,12 +29,5 @@
 - Give a large rewrite its own branch, and delete the code it replaces only there.
 
 ## Changelog
-In a project with a `CHANGELOG.md`:
-- Follow Keep a Changelog and Semantic Versioning: `## [Unreleased]` at the top, then
-  `## [<version>] - <date>` sections with `### Added`, `### Changed`, `### Fixed` and
-  `### Removed`, and the release links at the bottom.
-- Add the line of a change that users can see to `## [Unreleased]` in the same commit,
-  creating the section if it is missing. Internal refactors, tests and CI changes get no
-  line.
-- Describe the change as a user sees it, with the old behavior where that helps:
-  "`load_image` accepts a `str` path as well as a `Path`. It raised a `TypeError`."
+- In a project with a `CHANGELOG.md`, add a line for each change users can see to its
+  `## [Unreleased]` section, in the same commit as the change.

@@ -168,4 +168,6 @@ if wants pi; then
     if ! grep -q "pi-claude-rules" "$pi_dir/settings.json" 2>/dev/null; then
         pi install "$pi_rules_package"
     fi
+    # Also load rules for files that a bash command names, as the Codex hook does.
+    link "$repo/harnesses/pi/claude-rules.json" "$pi_dir/claude-rules.json"
 fi

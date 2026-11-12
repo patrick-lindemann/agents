@@ -4,6 +4,11 @@ paths:
 ---
 # Python
 
+## Tools
+- Use uv, never `pip` or a bare `python`: `uv run`, `uv add`.
+- Format and lint changed files with `uv run ruff format <paths>` and
+  `uv run ruff check --fix <paths>`.
+
 ## Names
 - Use complete words and only established abbreviations (`args`, `config`, `rng`,
   `num_`), never single letters, even in comprehensions, except a lone type parameter `T`
@@ -109,14 +114,11 @@ paths:
 - A class that holds a resource is a context manager: `__enter__` returns `Self`,
   `__exit__` takes three exception arguments and returns `Literal[False]`.
 
-## Docstrings and comments
-- Use Google style. State the contract concisely (inputs, result, errors), not the
-  implementation; no notes, usage, examples or doctests, no module docstrings, no math
+## Docstrings
+- Use Google style. No notes, usage, examples or doctests, no module docstrings, no math
   markup. Backtick code and special values (`None`), in error messages too.
 - Follow a closing backtick with a space or punctuation, never a letter: "the
   `$target` nodes", not "the `$target`s", which Sphinx reads as markup without an end.
-- Write docstrings and comments as plain sentences, without semicolons: split joined
-  clauses into sentences.
 - The summary is imperative with a period ("Load a config file."), alone or followed by
   every applicable section. What needs explaining goes into a paragraph between the
   summary and the sections, never into an argument's entry.
@@ -128,10 +130,10 @@ paths:
   timeout in seconds. Defaults to `None`, in which case it waits forever."
 - `Returns:` starts with the description; `Raises:` gives each expected error and its
   condition. Private functions get a docstring only where unclear.
-- Write no docstring that only restates the name, base class or signature, such as
-  `"""The config of an order."""` on `class OrderConfig(TypedDict)`. A docstring with
-  `Args:`, `Returns:` or `Raises:` keeps its summary line and documents every argument,
-  even where the entry only repeats the name (`user: The user.`), for consistency.
+- Write no docstring such as `"""The config of an order."""` on
+  `class OrderConfig(TypedDict)`. A docstring with `Args:`, `Returns:` or `Raises:` keeps
+  its summary line and documents every argument, even where the entry only repeats the
+  name (`user: The user.`), for consistency.
 - A class docstring, where one is needed, is one sentence of what it is ("A cache that
   evicts the least recently used entry.", not "Base class for all caches."). Document
   the constructor in `__init__` ("Initialize the cache."); an error class says which
@@ -139,10 +141,6 @@ paths:
 - Attributes and dataclass fields get no docstrings, a public property one line, a public
   constant one below it: `DEFAULT_TIMEOUT = 30.0`, then
   `"""The request timeout in seconds when none is given."""`.
-- Comment only reasons the code cannot show, as a full sentence above the code, except a
-  terse label over a section of a long body or a short identity at the line's end; never
-  mention modules the code is independent of:
-  `# Checked before the first request, so that nothing is sent for an invalid config`
 
 ## Errors
 - Write messages as full sentences that say what is wrong and how to fix it, with wrong

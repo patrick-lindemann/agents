@@ -47,14 +47,12 @@
 - Test changed behavior; a bug fix gets a test that fails without it.
 - `src/` is the specification: "fix the tests" means changing the tests. Change a test
   only where the task changes what it checks.
-- Before finishing, run `uv run ruff format` and `uv run ruff check --fix` on only the
-  changed files, then the checks `AGENTS.md` names; fix the failures you caused, report
-  the others with their output.
+- Before finishing, run the formatter and linter of the language on only the changed
+  files, then the checks `AGENTS.md` names; fix the failures you caused, report the
+  others with their output.
 
 ## Environment
-- Use uv, never `pip` or a bare `python`. Justify a new dependency against the standard
-  library and the existing ones, typing included.
+- Use the project's package manager and tools. Justify a new dependency against the
+  standard library and the existing ones, typing included.
 - Give a subagent its rule files, the commit rules and the protected paths; verify its
   claims.
-- Keep user docs (`README.md`, `docs/`) short, without a code tour; update the docs of a
-  language users write (config syntax, command line) in the same commit as the change.

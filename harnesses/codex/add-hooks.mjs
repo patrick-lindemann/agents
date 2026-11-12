@@ -10,7 +10,7 @@ const hook = 'node "$HOME/agents/harnesses/codex/rules-hook.mjs"';
 const wanted = [
 	{ event: "SessionStart", matcher: "startup|clear|compact", command: `${hook} session-start` },
 	{ event: "SubagentStart", command: `${hook} session-start` },
-	{ event: "PreToolUse", matcher: "^apply_patch$", command: `${hook} pre-tool-use` },
+	{ event: "PreToolUse", matcher: "^(apply_patch|Bash)$", command: `${hook} pre-tool-use` },
 ];
 
 let config = {};

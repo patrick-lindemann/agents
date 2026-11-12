@@ -1,28 +1,34 @@
 #!/usr/bin/env node
-// Codex hook that loads path-scoped rules as Claude Code does: the first apply_patch on
-// a file that a rule's `paths:` matches is blocked, and the rules go into the model's
-// context with the block, so that the patch is made again with them in view. The rules go
+// Codex hook that loads path-scoped rules as Claude Code does. The first tool call on a
+// file that a rule's `paths:` matches is blocked, and the rules go into the model's
+// context with the block, so that the call is made again with them in view. The rules go
 // in `additionalContext`, not in the block reason: Codex shortens a reason above about
 // 2,500 tokens, while hooks.json raises the limit for context (`additionalContextLimit`).
-// Each rule is delivered once per session
-// and subagent, and again after a compaction. Globs match the path relative to the
-// working directory, as for Claude Code's user-level rules.
+// Each rule is delivered once per session and subagent, and again after a compaction.
+// Globs match the path relative to the working directory, as for Claude Code's user-level
+// rules; files outside it load no rules.
+//
+// The files of a call are the headers of an apply_patch, and for a shell command every
+// word that names an existing file or the target of an output redirection (`> new.py`).
+// A shell command is not parsed, so a path built at run time (`$dir/a.py`) is missed.
 //
 //   rules-hook.mjs session-start   SessionStart (startup, clear, compact) and SubagentStart:
 //                                  give the rules without `paths:`, which always apply
-//   rules-hook.mjs pre-tool-use    PreToolUse on apply_patch: the gate described above
+//   rules-hook.mjs pre-tool-use    PreToolUse on apply_patch and Bash: the gate above
 //
 // Rules are the Markdown files under ~/agents/rules/ (or AGENTS_RULES_DIR).
 // Any error lets the tool call through, and is logged to the state directory.
 
 import { createHash } from "node:crypto";
-import { appendFileSync, mkdirSync, readdirSync, readFileSync, realpathSync, rmSync, statSync, writeFileSync } from "node:fs";
+import { appendFileSync, existsSync, mkdirSync, readdirSync, readFileSync, realpathSync, rmSync, statSync, writeFileSync } from "node:fs";
 import { homedir } from "node:os";
 import { isAbsolute, join, matchesGlob, relative, resolve } from "node:path";
 
 const RULES_DIR = process.env.AGENTS_RULES_DIR ?? join(homedir(), "agents", "rules");
 const STATE_DIR = join(process.env.XDG_STATE_HOME ?? join(homedir(), ".local", "state"), "agents-rules", "codex");
 const PATCH_HEADER = /^\*\*\* (?:Add|Update) File: (.+)$|^\*\*\* Move to: (.+)$/gm;
+const WORD = /"((?:[^"\\]|\\.)*)"|'([^']*)'|([^\s"'|;&<>()]+)/g;
+const REDIRECT_TARGET = /(?:^|[^<>&\d])\d*>{1,2}\|?\s*("[^"]+"|'[^']+'|[^\s|;&<>()]+)/g;
 
 function main() {
 	const event = JSON.parse(readFileSync(0, "utf8"));
@@ -44,7 +50,7 @@ function main() {
 	const command = event.tool_input?.command;
 	if (typeof command !== "string") return;
 	const root = resolve(event.cwd);
-	const targets = [...command.matchAll(PATCH_HEADER)].map((match) => resolve(event.cwd, (match[1] ?? match[2]).trim()));
+	const targets = event.tool_name === "apply_patch" ? patchTargets(command, root) : shellTargets(command, root);
 	if (targets.length === 0) return;
 
 	const delivered = new Set(readJson(statePath, []));
@@ -58,7 +64,7 @@ function main() {
 	writeFileSync(statePath, JSON.stringify([...delivered]));
 
 	const names = due.map((rule) => relative(RULES_DIR, rule.file)).join(", ");
-	const reason = `Patch not applied: the rules for these files (${names}) are now in your context. Follow them and apply the same patch again.`;
+	const reason = `Not run: the rules for these files (${names}) are now in your context. Follow them and run the same call again.`;
 	const context = due.map((rule) => `<rule file="${rule.file}">\n${rule.body.trim()}\n</rule>`).join("\n\n");
 	process.stdout.write(
 		JSON.stringify({
@@ -70,6 +76,27 @@ function main() {
 			},
 		}),
 	);
+}
+
+function patchTargets(patch, root) {
+	return [...patch.matchAll(PATCH_HEADER)].map((match) => resolve(root, (match[1] ?? match[2]).trim()));
+}
+
+// Every word that names an existing file, and every redirection target, which may be a
+// file the command creates.
+function shellTargets(command, root) {
+	const targets = new Set();
+	for (const match of command.matchAll(REDIRECT_TARGET)) {
+		const word = unquote(match[1]);
+		if (!word.startsWith("&") && !word.startsWith("/dev/")) targets.add(resolve(root, word));
+	}
+	for (const match of command.matchAll(WORD)) {
+		const word = match[1] ?? match[2] ?? match[3];
+		if (!word || word.startsWith("-") || word.includes("$") || /^[a-z]+:\/\//i.test(word)) continue;
+		const path = resolve(root, word);
+		if (existsSync(path) && statSync(path).isFile()) targets.add(path);
+	}
+	return [...targets];
 }
 
 function matches(target, root, glob) {

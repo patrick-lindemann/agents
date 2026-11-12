@@ -6,7 +6,8 @@ copies. Nothing in it is specific to one machine.
 
 ## Layout
 - `rules/`: `common/` holds the rules for all work; one folder per language
-  (`python/`, …) holds a module per kind of code.
+  (`python/`, …) holds a module per kind of code; `workflows/` holds the rules of a task
+  that a file marks, such as `CHANGELOG.md`.
 - `skills/`: skills, see `skills/README.md`. Write them for every harness: no tool name
   of one harness, only the words its "Harness words" table maps.
 - `roles/`: the subagent roles, one neutral file each: `name`, `description`, `tier`
@@ -15,7 +16,7 @@ copies. Nothing in it is specific to one machine.
 - `models.local.json` (git-ignored, optional): models for the tiers on this machine; see
   `skills/README.md`. Without it, every role runs on the session's model.
 - `harnesses/codex/`: the Codex hooks that load the rules, and the script that registers
-  them.
+  them. `harnesses/pi/claude-rules.json`: the settings of Pi's rules extension.
 - `scripts/build.py`: generates the role files per harness into `dist/` (git-ignored).
 - `scripts/install.sh [--harness claude,codex,pi]`: links `~/agents` to this checkout,
   and installs the skills, roles and rule loading for each harness; see
@@ -30,7 +31,12 @@ them short. Every other module starts with `paths:` frontmatter, a list of globs
 to the project root, and loads only when a matching file is read or edited: `**/*.py`
 for `python/python.md`. A module that applies to only part of a language's code, such as
 `scientific.md`, says so in its first line, so that the model ignores it elsewhere. Put a
-new language in its own folder.
+new language in its own folder. A rule that holds for every language goes into
+`common/`, and the language folder adds only what is specific to it: `common/docs.md`
+says what a comment may say, `python/python.md` the docstring format. Every harness
+loads a module without `paths:` in every session, so the rules of a task that no file
+marks, such as a release, go next to the skill that runs it
+(`skills/release/rules/release.md`), not into `rules/`.
 
 **Structure:**
 - Write `# Title`, then `## Topic` sections. One module covers one kind of code.

@@ -104,19 +104,23 @@ How rules load:
   of a session, one with `paths:` when a matching file is read or edited. Globs match the
   path relative to the working directory.
 - **Pi** reads the same folder through the extension `@jordyvanvorselen/pi-claude-rules`,
-  pinned in `install.sh`. A matching read gets the rules in its result; the first edit or
-  write of a matching file is blocked until the rules have reached the model. Pi
-  subagents load the extension through `subagentOnlyExtensions` in their role file.
+  pinned in `install.sh`, with `bashActivation` on (`harnesses/pi/claude-rules.json`). A
+  matching read, by the read tool or a reading bash command, gets the rules in its result;
+  the first edit, write or other bash command on a matching file is blocked until the
+  rules have reached the model. Pi subagents load the extension through
+  `subagentOnlyExtensions` in their role file.
 - **Codex** runs `harnesses/codex/rules-hook.mjs`: `SessionStart` and `SubagentStart` give
-  the rules without `paths:`; `PreToolUse` blocks the first `apply_patch` of a matching
-  file and puts its rules into the context (`additionalContext`, up to 12,000 tokens per
-  hook in `hooks.json`; a block reason would be cut at about 2,500). Run `/hooks` in
-  Codex once to trust the hooks; until then Codex loads no rules. Codex reads files
-  through the shell, so reads load nothing there.
+  the rules without `paths:`; `PreToolUse` blocks the first `apply_patch` or shell
+  command on a matching file and puts its rules into the context (`additionalContext`, up
+  to 12,000 tokens per hook in `hooks.json`; a block reason would be cut at about 2,500).
+  Run `/hooks` in Codex once to trust the hooks; until then Codex loads no rules.
 - After a compaction, each harness delivers the rules again on the next match.
 - Rules load only for files inside the working directory. Throwaway scripts go to a
   scratch directory outside the project (`common/shell.md`), so they load no language
-  rules. No harness sees a file that a shell command writes.
+  rules.
+- A shell command counts when it names the file: as an argument that exists, or, in
+  Codex, as the target of `>`. A path built at run time (`$dir/a.py`), or a file a script
+  writes, is not seen.
 
 A user-invoked skill carries `disable-model-invocation: true` in its frontmatter for
 Claude Code and Pi, and `policy.allow_implicit_invocation: false` in `agents/openai.yaml`

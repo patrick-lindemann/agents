@@ -10,17 +10,10 @@ with the user: merging the release pull request, pushing `main`, and tags.
 
 Argument: the version. Without it, pick one in step 2.
 
-Read `git.md` in `~/agents/rules/common/`, the project's `AGENTS.md`, and its `CONTRIBUTING.md`
-if there is one. Their release section wins over the defaults here: the flow, release
+Read `git.md` in `~/agents/rules/common/`, `changelog.md` in `~/agents/rules/workflows/`,
+`~/agents/skills/release/rules/release.md`, the project's `AGENTS.md`, and its `CONTRIBUTING.md` if
+there is one. The project's release section wins over the defaults: the flow, release
 candidates, the files, extra steps, the commit message and who tags.
-
-The project releases in one of two flows:
-- **Pull request**: work happens on an integration branch, usually `develop`, and `main`
-  moves only by merging a pull request from it. The default where a `develop` branch
-  exists.
-- **Direct**: the project has only `main`, and the release is a commit on it.
-
-Release candidates are made only where the project's release section says so.
 
 ## Steps
 
@@ -31,9 +24,7 @@ Release candidates are made only where the project's release section says so.
    are in the chat.
 
 2. **Version.** Read `## [Unreleased]` in `CHANGELOG.md` and `git log
-   v<previous>..HEAD`. Pick the version by Semantic Versioning: a removed or changed
-   public behaviour bumps the major version, or the minor one before 1.0; an addition
-   bumps the minor version; fixes alone bump the patch version. Name the version and the
+   v<previous>..HEAD`. Pick the version as `release.md` says. Name the version and the
    entries that decide it. A version given as argument is checked the same way; where
    it differs from yours, ask the user with the question tool. Done when the version is
    set.
@@ -45,7 +36,7 @@ Release candidates are made only where the project's release section says so.
    again. Done when a candidate exists and the user confirmed it.
 
 4. **Prepare.**
-   - Run `uv version <version>`, which also updates `uv.lock`.
+   - Set the version with the language's tool (`release.md`).
    - In `CHANGELOG.md`, rename `## [Unreleased]` to `## [<version>] - <date>` and leave
      an empty `## [Unreleased]` above it. Check each line against the log: add a
      user-visible change that is missing, drop a line whose change is not in the log, and
@@ -62,9 +53,8 @@ Release candidates are made only where the project's release section says so.
    what it printed is in the chat and they pass.
 
 6. **Commit.** Stage exactly the changed files, check `git diff --cached --name-only`,
-   and commit with the project's message: by default `Prepare <version>` in the pull
-   request flow, whose merge commit is `Release <version>`, and `Release <version>` in
-   the direct flow. Done when `git log -1 --stat` is in the chat.
+   and commit with the project's message, by default the one `release.md` names for the
+   flow. Done when `git log -1 --stat` is in the chat.
 
 7. **Hand over.**
    - **Pull request flow**: push the release branch with `git push`. Write the
