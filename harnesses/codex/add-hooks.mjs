@@ -23,11 +23,15 @@ config.hooks ??= {};
 let changed = false;
 for (const { event, matcher, command } of wanted) {
 	const groups = (config.hooks[event] ??= []);
-	if (groups.some((group) => group.hooks?.some((entry) => entry.command === command))) continue;
-	// The always-applying rules are about 2,500 tokens, Codex's default limit for context.
-	const entry = { type: "command", command, timeout: 10, additionalContextLimit: 6000 };
-	groups.push({ ...(matcher ? { matcher } : {}), hooks: [entry] });
+	// The rules of one language are about 6,000 tokens; Codex shortens context above the
+	// limit, by default 2,500 tokens.
+	const entry = { type: "command", command, timeout: 10, additionalContextLimit: 12000 };
+	const group = { ...(matcher ? { matcher } : {}), hooks: [entry] };
+	const index = groups.findIndex((existing) => existing.hooks?.some((hook) => hook.command === command));
+	if (index >= 0 && JSON.stringify(groups[index]) === JSON.stringify(group)) continue;
+	if (index >= 0) groups[index] = group;
+	else groups.push(group);
 	changed = true;
-	console.log(`add ${event} hook to ${file}`);
+	console.log(`${index >= 0 ? "update" : "add"} ${event} hook in ${file}`);
 }
 if (changed) writeFileSync(file, `${JSON.stringify(config, null, 2)}\n`);

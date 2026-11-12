@@ -109,10 +109,14 @@ How rules load:
   subagents load the extension through `subagentOnlyExtensions` in their role file.
 - **Codex** runs `harnesses/codex/rules-hook.mjs`: `SessionStart` and `SubagentStart` give
   the rules without `paths:`; `PreToolUse` blocks the first `apply_patch` of a matching
-  file, with its rules as the reason. Run `/hooks` in Codex once to trust the hooks.
-  Codex reads files through the shell, so reads load nothing there.
-- After a compaction, each harness delivers the rules again on the next match. No
-  harness sees a file that a shell command writes.
+  file and puts its rules into the context (`additionalContext`, up to 12,000 tokens per
+  hook in `hooks.json`; a block reason would be cut at about 2,500). Run `/hooks` in
+  Codex once to trust the hooks; until then Codex loads no rules. Codex reads files
+  through the shell, so reads load nothing there.
+- After a compaction, each harness delivers the rules again on the next match.
+- Rules load only for files inside the working directory. Throwaway scripts go to a
+  scratch directory outside the project (`common/shell.md`), so they load no language
+  rules. No harness sees a file that a shell command writes.
 
 A user-invoked skill carries `disable-model-invocation: true` in its frontmatter for
 Claude Code and Pi, and `policy.allow_implicit_invocation: false` in `agents/openai.yaml`

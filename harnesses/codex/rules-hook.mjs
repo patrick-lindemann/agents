@@ -1,10 +1,10 @@
 #!/usr/bin/env node
 // Codex hook that loads path-scoped rules as Claude Code does: the first apply_patch on
-// a file that a rule's `paths:` matches is blocked, and the block reason carries the
-// rules, so that the patch is made again with them in context. All due rules go in one
-// block. Codex shortens a block reason above about 2,500 tokens, so the reason names each
-// rule file, for the model to read in full when it was shortened. Each rule is delivered
-// once per session
+// a file that a rule's `paths:` matches is blocked, and the rules go into the model's
+// context with the block, so that the patch is made again with them in view. The rules go
+// in `additionalContext`, not in the block reason: Codex shortens a reason above about
+// 2,500 tokens, while hooks.json raises the limit for context (`additionalContextLimit`).
+// Each rule is delivered once per session
 // and subagent, and again after a compaction. Globs match the path relative to the
 // working directory, as for Claude Code's user-level rules.
 //
@@ -57,14 +57,17 @@ function main() {
 	mkdirSync(STATE_DIR, { recursive: true });
 	writeFileSync(statePath, JSON.stringify([...delivered]));
 
-	const reason = [
-		"Patch not applied: rules for these files had not been loaded yet. Follow them and apply the same patch again.",
-		`If this message is shortened, first read in full: ${due.map((rule) => rule.file).join(", ")}.`,
-		...due.map((rule) => `\n<rule file="${rule.file}">\n${rule.body.trim()}\n</rule>`),
-	].join("\n");
+	const names = due.map((rule) => relative(RULES_DIR, rule.file)).join(", ");
+	const reason = `Patch not applied: the rules for these files (${names}) are now in your context. Follow them and apply the same patch again.`;
+	const context = due.map((rule) => `<rule file="${rule.file}">\n${rule.body.trim()}\n</rule>`).join("\n\n");
 	process.stdout.write(
 		JSON.stringify({
-			hookSpecificOutput: { hookEventName: "PreToolUse", permissionDecision: "deny", permissionDecisionReason: reason },
+			hookSpecificOutput: {
+				hookEventName: "PreToolUse",
+				permissionDecision: "deny",
+				permissionDecisionReason: reason,
+				additionalContext: context,
+			},
 		}),
 	);
 }

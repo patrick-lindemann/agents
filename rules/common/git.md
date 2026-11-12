@@ -13,7 +13,7 @@
 - Never amend, rebase, force-push, tag or merge; these stay with the user.
 - Discard a change (`git restore`, `git checkout -- <path>`) only when it is your own
   from this session or the user explicitly told you to; otherwise save it first with
-  `git diff -- <paths> > $S/<name>.patch` and name the patch in your report. Unstage
+  `git diff -- <paths> > "$scratch/<name>.patch"` and name the patch in your report. Unstage
   with `git restore --staged`.
 
 ## Pushes and pull requests

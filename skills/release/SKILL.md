@@ -68,7 +68,7 @@ Release candidates are made only where the project's release section says so.
 
 7. **Hand over.**
    - **Pull request flow**: push the release branch with `git push`. Write the
-     version's changelog section to a file in the scratchpad and open the pull request
+     version's changelog section to a file in the scratch directory and open the pull request
      with `gh pr create --base main --head <branch> --title "Release <version>"
      --body-file <file>`. Give its URL, and tell the user to merge it once CI passes.
      Where the project's CI does not tag the merge, give the tag commands for after the
