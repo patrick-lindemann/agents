@@ -89,8 +89,8 @@ On a new machine, clone the repository and run its install script once; it needs
 git clone git@github.com:patrick-lindemann/agents.git ~/agents && ~/agents/scripts/install.sh
 ```
 
-The script installs a `post-merge` hook in the checkout that runs it again after every
-pull. Run it by hand after adding or removing a skill or a role, or after changing a
+The script installs `post-merge` and `post-rewrite` hooks in the checkout that run it
+again after every pull, `git pull --rebase` included. Run it by hand after adding or removing a skill or a role, or after changing a
 role or the frontmatter of a skill. The skills always go into `~/.agents/skills/`. The rest goes to each harness that is installed, that is whose
 command is on `PATH` or whose config directory exists, or to those given with
 `--harness claude,codex,pi`; a harness that is not installed is skipped, and its
