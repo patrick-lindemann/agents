@@ -27,7 +27,7 @@ workplan is optional.
 
 The templates are in `~/agents/skills/spec/templates/`.
 
-Read `core.md` and `communication.md` in `~/agents/rules/`, and the rule files of the
+Read `core.md` and `communication.md` in `~/agents/rules/common/`, and the rule files of the
 area the work touches.
 
 ## Steps

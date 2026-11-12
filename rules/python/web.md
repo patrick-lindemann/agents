@@ -1,4 +1,10 @@
-# Web services
+---
+paths:
+  - "**/*.py"
+---
+# Python web services
+
+These rules apply only to code of a web service. Ignore them for other Python code.
 
 <!-- A starter set; grow it from failures that are observed. -->
 

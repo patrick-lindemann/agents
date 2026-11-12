@@ -13,7 +13,7 @@ Arguments: the notes. With `session` instead, look back over the whole session f
 went wrong: the mistakes, the user's corrections, and the instructions the user gave more
 than once.
 
-Read `core.md`, `communication.md` and `git.md` in `~/agents/rules/`, and the rule files
+Read `core.md`, `communication.md` and `git.md` in `~/agents/rules/common/`, and the rule files
 for the code the notes are about.
 
 ## Steps

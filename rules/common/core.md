@@ -1,8 +1,8 @@
 # Core
 
 - Precedence: the user, `AGENTS.md`, these rules, the surrounding code; a module for a
-  kind of code (numerics, cli …) overrides `python.md`. Report, don't resolve, a conflict
-  within one level.
+  kind of code (scientific, cli …) overrides its language module (`python.md`). Report,
+  don't resolve, a conflict within one level.
 
 ## Scope
 - Build on the existing code and its style, but write new code by these rules. Mention,

@@ -11,7 +11,7 @@ Arguments: the material (a path, a diff range, or "this discussion"), and option
 number of reviewers, the number of discussion rounds and a focus. The argument `stage`
 runs the short form inside `implement` (see the last section).
 
-Read `core.md` and `communication.md` in `~/agents/rules/`.
+Read `core.md` and `communication.md` in `~/agents/rules/common/`.
 
 ## Findings
 

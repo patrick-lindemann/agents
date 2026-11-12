@@ -10,7 +10,7 @@ with the user: merging the release pull request, pushing `main`, and tags.
 
 Argument: the version. Without it, pick one in step 2.
 
-Read `git.md` in `~/agents/rules/`, the project's `AGENTS.md`, and its `CONTRIBUTING.md`
+Read `git.md` in `~/agents/rules/common/`, the project's `AGENTS.md`, and its `CONTRIBUTING.md`
 if there is one. Their release section wins over the defaults here: the flow, release
 candidates, the files, extra steps, the commit message and who tags.
 

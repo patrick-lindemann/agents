@@ -1,6 +1,12 @@
 #!/usr/bin/env bash
-# Install the skills, subagent roles and user-level rules of this repository for each
-# coding harness: Claude Code, Codex and Pi.
+# Install the skills, subagent roles and rules of this repository for each coding
+# harness: Claude Code, Codex and Pi.
+#
+# Rules: rules/ is linked to ~/.claude/rules/agents. Claude Code loads it natively: a
+# rule without `paths:` always, one with `paths:` when a matching file is read or edited.
+# Pi reads the same folder through the pi-claude-rules extension, and Codex through
+# harnesses/codex/rules-hook.mjs; both block the first edit of a matching file until its
+# rules are delivered.
 #
 # Usage: install.sh [--harness claude,codex,pi]   default: every harness installed
 #
@@ -9,7 +15,7 @@
 # harness that is not installed are skipped, and its directory is not created.
 #
 # Run once per machine, and again after adding or removing a skill or a role, or after
-# changing a user-level rule or a role. Links point into this checkout; the generated
+# changing a role. Links point into this checkout; the generated
 # subagent files are in dist/ (git-ignored).
 set -euo pipefail
 
@@ -18,6 +24,8 @@ dist="$repo/dist"
 claude_dir="${CLAUDE_CONFIG_DIR:-$HOME/.claude}"
 codex_dir="${CODEX_HOME:-$HOME/.codex}"
 pi_dir="${PI_CODING_AGENT_DIR:-$HOME/.pi/agent}"
+# Pinned, so that an update cannot change how rules load unseen.
+pi_rules_package="npm:@jordyvanvorselen/pi-claude-rules@0.1.4"
 
 harnesses=""
 while [[ $# -gt 0 ]]; do
@@ -93,6 +101,33 @@ link_roles() {
     prune "$dir"
 }
 
+# Copy every generated role of Codex into $1. Codex lists a linked agent file but cannot
+# spawn it ("agent type is currently not available", 0.167.2), so the files are copies.
+# A copy starts with a marker line, so that only copies made here are replaced or removed.
+copy_codex_roles() {
+    local dir="$1" role target marker="# Generated from ~/agents/roles by install.sh; edit there."
+    mkdir -p "$dir"
+    for target in "$dir"/*.toml; do
+        [[ -L "$target" && "$(readlink "$target")" == "$repo"/* ]] && rm "$target"
+        if [[ -f "$target" && ! -L "$target" && "$(head -1 "$target")" == "$marker" ]] \
+            && [[ ! -e "$dist/codex/agents/$(basename "$target")" ]]; then
+            rm "$target"
+            echo "remove $target"
+        fi
+    done
+    for role in "$dist/codex/agents"/*.toml; do
+        target="$dir/$(basename "$role")"
+        if [[ -e "$target" && "$(head -1 "$target")" != "$marker" ]]; then
+            echo "skip $target: exists and was not made by install.sh" >&2
+            continue
+        fi
+        if ! { echo "$marker"; cat "$role"; } | cmp -s - "$target"; then
+            { echo "$marker"; cat "$role"; } >"$target"
+            echo "copy $target"
+        fi
+    done
+}
+
 # A fixed path for the skills and rules, which refer to ~/agents/... wherever the
 # checkout is.
 if [[ "$repo" != "$HOME/agents" ]]; then
@@ -103,12 +138,15 @@ echo "harnesses:${selected:- none}"
 # shellcheck disable=SC2086
 [[ -n $selected ]] && python3 -I "$repo/scripts/build.py" roles "$dist" $selected
 
-if wants claude; then
+# Claude Code and the Pi extension read the rules from ~/.claude/rules; the Codex hook
+# reads ~/agents/rules.
+if wants claude || wants pi; then
     mkdir -p "$claude_dir/rules"
-    for rule in communication git shell; do
-        link "$repo/rules/$rule.md" "$claude_dir/rules/$rule.md"
-    done
+    link "$repo/rules" "$claude_dir/rules/agents"
     prune "$claude_dir/rules"
+fi
+
+if wants claude; then
     link_skills "$claude_dir/skills"
     link_roles claude "$claude_dir/agents"
 fi
@@ -117,13 +155,17 @@ fi
 link_skills "$HOME/.agents/skills"
 
 if wants codex; then
-    link_roles codex "$codex_dir/agents"
-    python3 -I "$repo/scripts/build.py" user-rules \
-        | python3 -I "$repo/scripts/build.py" block "$codex_dir/AGENTS.md" agents-rules
+    copy_codex_roles "$codex_dir/agents"
+    python3 -I "$repo/scripts/build.py" unblock "$codex_dir/AGENTS.md" agents-rules
+    if node "$repo/harnesses/codex/add-hooks.mjs" "$codex_dir/hooks.json" | grep .; then
+        echo "codex: run /hooks once to trust the new rules hooks"
+    fi
 fi
 
 if wants pi; then
     link_roles pi "$pi_dir/agents"
-    python3 -I "$repo/scripts/build.py" user-rules \
-        | python3 -I "$repo/scripts/build.py" block "$pi_dir/AGENTS.md" agents-rules
+    python3 -I "$repo/scripts/build.py" unblock "$pi_dir/AGENTS.md" agents-rules
+    if ! grep -q "pi-claude-rules" "$pi_dir/settings.json" 2>/dev/null; then
+        pi install "$pi_rules_package"
+    fi
 fi

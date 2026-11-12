@@ -18,7 +18,7 @@ Only the user starts these: `/<name>` in Claude Code, `$<name>` in Codex,
 | `handover` | Give the session as a prompt in the chat that a fresh agent can continue from; `file` also saves it. |
 | `spike` | Try a design as a throwaway patch and measure it. |
 | `release` | Prepare a release: version, changelog, checks and commit, then the release pull request or the push and tag commands. |
-| `setup` | Link the shared rules into a project by kind, and align its `AGENTS.md`, `CLAUDE.md` and tool settings; on a project already set up, bring it up to date. |
+| `setup` | Align a project's `AGENTS.md`, `CLAUDE.md` and tool settings with the shared rules; on a project already set up, bring them up to date. |
 
 ## Model-invoked
 
@@ -35,13 +35,10 @@ The user, the model or another skill starts these.
 The skills run in Claude Code, Codex and Pi. They name no tool of one harness; the
 tables below map their words to each harness.
 
-- **Rules.** The rules are in `~/agents/rules/`. `communication.md`, `git.md` and
-  `shell.md` are user-level and load in every session: Claude Code links them into
-  `~/.claude/rules/`, Codex and Pi get them in a generated block of their user
-  `AGENTS.md`. `/setup` links `core.md`, `python.md` and the modules that fit a project
-  into its `.claude/rules/` for Claude Code, and lists them, with when to read each, in a
-  generated block of the project's `AGENTS.md` for the others. The skills point at a rule
-  by file and section and do not change the rules.
+- **Rules.** The rules are in `~/agents/rules/`: `common/` loads in every session, a
+  language folder such as `python/` when a matching file is read or edited (see
+  "Installation"). The skills point at a rule by file and section and do not change the
+  rules.
 - **Files** go into the project's `specs/`, which is usually git-ignored and exists only
   in the main checkout. A skill's templates are in `~/agents/skills/<skill>/templates/`.
 - **Harness words.** What a skill says, and what it is in each harness:
@@ -86,7 +83,7 @@ tables below map their words to each harness.
 ## Installation
 
 Run `~/agents/scripts/install.sh` once per machine, and again after adding or removing a
-skill or a role, or after changing a role or a user-level rule. The skills always go
+skill or a role, or after changing a role. The skills always go
 into `~/.agents/skills/`. The rest goes to each harness that is installed, that is whose
 command is on `PATH` or whose config directory exists, or to those given with
 `--harness claude,codex,pi`; a harness that is not installed is skipped, and its
@@ -96,10 +93,26 @@ directory is not created:
 |---|---|---|---|
 | Skills | `~/.claude/skills/` | `~/.agents/skills/` | `~/.agents/skills/` |
 | Roles | `~/.claude/agents/*.md` | `~/.codex/agents/*.toml` | `~/.pi/agent/agents/*.md` |
-| User-level rules | `~/.claude/rules/` | block in `~/.codex/AGENTS.md` | block in `~/.pi/agent/AGENTS.md` |
+| Rules | `~/.claude/rules/agents` | hooks in `~/.codex/hooks.json` | `pi-claude-rules`, from `~/.claude/rules/agents` |
 
 It also links `~/agents` to the checkout, so the skills find the rules and templates
-wherever it is.
+wherever it is. Rules need no install step after an edit: every harness reads them from
+the checkout.
+
+How rules load:
+- **Claude Code** loads `~/.claude/rules/` natively: a rule without `paths:` at the start
+  of a session, one with `paths:` when a matching file is read or edited. Globs match the
+  path relative to the working directory.
+- **Pi** reads the same folder through the extension `@jordyvanvorselen/pi-claude-rules`,
+  pinned in `install.sh`. A matching read gets the rules in its result; the first edit or
+  write of a matching file is blocked until the rules have reached the model. Pi
+  subagents load the extension through `subagentOnlyExtensions` in their role file.
+- **Codex** runs `harnesses/codex/rules-hook.mjs`: `SessionStart` and `SubagentStart` give
+  the rules without `paths:`; `PreToolUse` blocks the first `apply_patch` of a matching
+  file, with its rules as the reason. Run `/hooks` in Codex once to trust the hooks.
+  Codex reads files through the shell, so reads load nothing there.
+- After a compaction, each harness delivers the rules again on the next match. No
+  harness sees a file that a shell command writes.
 
 A user-invoked skill carries `disable-model-invocation: true` in its frontmatter for
 Claude Code and Pi, and `policy.allow_implicit_invocation: false` in `agents/openai.yaml`
