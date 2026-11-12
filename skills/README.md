@@ -57,7 +57,7 @@ tables below map their words to each harness.
   `{"claude": {"cheap": "haiku"}, "pi": {"middle": "openai-codex/gpt-6.1-terra"}}`. A
   tier without an entry stays on the session's model.
 - **Roles.** The skills name their subagents by role. Each role is one file in
-  `~/agents/roles/` with a tier, an effort and tool groups; `scripts/build.py` turns it
+  `~/agents/roles/` with a tier, an effort and tool groups; `scripts/build.mjs` turns it
   into an agent definition per harness:
 
   | Role | Used by | Tier | Effort | Tools |

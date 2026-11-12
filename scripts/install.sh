@@ -17,6 +17,8 @@
 # Run once per machine, and again after adding or removing a skill or a role, or after
 # changing a role. Links point into this checkout; the generated
 # subagent files are in dist/ (git-ignored).
+#
+# Needs node, which the Codex hooks and the build script run on.
 set -euo pipefail
 
 repo="$(cd "$(dirname "$(realpath "${BASH_SOURCE[0]}")")/.." && pwd)"
@@ -56,6 +58,11 @@ for harness in ${harnesses:-claude codex pi}; do
     fi
 done
 wants() { [[ " $selected " == *" $1 "* ]]; }
+
+if ! command -v node >/dev/null; then
+    echo "install.sh needs node: install it, then run $0 again" >&2
+    exit 1
+fi
 
 # Link $1 to $2, replacing only an existing symlink, never a real file.
 link() {
@@ -136,7 +143,7 @@ fi
 
 echo "harnesses:${selected:- none}"
 # shellcheck disable=SC2086
-[[ -n $selected ]] && python3 -I "$repo/scripts/build.py" roles "$dist" $selected
+[[ -n $selected ]] && node "$repo/scripts/build.mjs" roles "$dist" $selected
 
 # Claude Code and the Pi extension read the rules from ~/.claude/rules; the Codex hook
 # reads ~/agents/rules.
@@ -156,7 +163,7 @@ link_skills "$HOME/.agents/skills"
 
 if wants codex; then
     copy_codex_roles "$codex_dir/agents"
-    python3 -I "$repo/scripts/build.py" unblock "$codex_dir/AGENTS.md" agents-rules
+    node "$repo/scripts/build.mjs" unblock "$codex_dir/AGENTS.md" agents-rules
     if node "$repo/harnesses/codex/add-hooks.mjs" "$codex_dir/hooks.json" | grep .; then
         echo "codex: run /hooks once to trust the new rules hooks"
     fi
@@ -164,7 +171,7 @@ fi
 
 if wants pi; then
     link_roles pi "$pi_dir/agents"
-    python3 -I "$repo/scripts/build.py" unblock "$pi_dir/AGENTS.md" agents-rules
+    node "$repo/scripts/build.mjs" unblock "$pi_dir/AGENTS.md" agents-rules
     if ! grep -q "pi-claude-rules" "$pi_dir/settings.json" 2>/dev/null; then
         pi install "$pi_rules_package"
     fi

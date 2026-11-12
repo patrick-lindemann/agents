@@ -17,7 +17,8 @@ copies. Nothing in it is specific to one machine.
   `skills/README.md`. Without it, every role runs on the session's model.
 - `harnesses/codex/`: the Codex hooks that load the rules, and the script that registers
   them. `harnesses/pi/claude-rules.json`: the settings of Pi's rules extension.
-- `scripts/build.py`: generates the role files per harness into `dist/` (git-ignored).
+- `scripts/build.mjs`: generates the role files per harness into `dist/` (git-ignored).
+  Node standard library only.
 - `scripts/install.sh [--harness claude,codex,pi]`: links `~/agents` to this checkout,
   and installs the skills, roles and rule loading for each harness; see
   `skills/README.md`. Run again after adding or removing a skill or a role, or after
