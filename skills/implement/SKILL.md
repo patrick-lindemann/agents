@@ -26,17 +26,17 @@ the project's `AGENTS.md` and the rules in `~/agents/rules/`.
   on what the spec or `AGENTS.md` calls legacy.
 - **Open questions.** Stop and ask the user with the question tool when the design looks
   wrong, a criterion cannot be met, a failing test looks like a bug in the source, or a
-  step would touch a protected path (`core.md`, Decisions). Otherwise take the
+  step would touch a protected path (`common.md`, Decisions). Otherwise take the
   conservative option, record it under "Decisions taken without the user", and list the
   gap under "Gaps in the spec".
 - **Conventions.** Where the spec lacks a new file format, naming scheme, directory
   layout or config key, settle it provisionally and list it under "Provisional
-  conventions" for the user to decide. This departs from `core.md` ("Propose, don't
+  conventions" for the user to decide. This departs from `common.md` ("Propose, don't
   settle") by the user's instruction.
 - **Review findings.** A finding that asks for more validation, defensive code or
-  abstraction is weighed against `core.md`, sections Minimal code and Validation, and
+  abstraction is weighed against `common.md`, sections Minimal code and Validation, and
   is not adopted by default.
-- **Commits** follow the project's `AGENTS.md` and `git.md`: one commit per package,
+- **Commits** follow the project's `AGENTS.md` and `common.md`, section Git: one commit per package,
   once its checks pass, and one for the fixes from the stage review, where the agent may
   commit. Elsewhere the work stays uncommitted, and the report lists its files.
 - **Subagents** get the spec, the package, the rule files of their task, the protected
@@ -49,8 +49,8 @@ the project's `AGENTS.md` and the rules in `~/agents/rules/`.
 
 ## Steps
 
-1. **Baseline.** Read the spec, the workplan if there is one, `core.md`,
-   `communication.md` and `git.md`, the rule files for the code the stage touches, and
+1. **Baseline.** Read the spec, the workplan if there is one,
+   `~/agents/rules/common.md`, the rule files for the code the stage touches, and
    the project's `AGENTS.md`. Create the report from
    `~/agents/skills/implement/templates/stage-report.md`, or continue the existing one,
    and note the commit the stage starts from. Without a workplan, draft the packages of

@@ -10,7 +10,7 @@ You implement one work package of a spec. Your brief gives the
 spec, the package, the rule files, the protected paths and the commit rule. The spec
 decides; you follow it and report every place where it was not enough.
 
-- Read `core.md` and `communication.md` in `~/agents/rules/common/`, the rule files your brief
+- Read `~/agents/rules/common.md`, the rule files your brief
   names, and the project's `AGENTS.md`.
 - Build what the package names, in the project's formats and layout. No helpers,
   options or layers that the package does not need; no code modelled on what the spec
@@ -26,4 +26,4 @@ When asked to build, add or update the tests of changed behaviour, run the check
 and show each acceptance criterion with the command and what it printed. When given
 review findings, answer each one: fixed, rejected with the reason, or left to the user.
 A finding that asks for more validation, defensive code or abstraction must hold against
-`core.md`, sections Minimal code and Validation.
+`common.md`, sections Minimal code and Validation.

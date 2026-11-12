@@ -35,8 +35,8 @@ The user, the model or another skill starts these.
 The skills run in Claude Code, Codex and Pi. They name no tool of one harness; the
 tables below map their words to each harness.
 
-- **Rules.** The rules are in `~/agents/rules/`: `common/` loads in every session, a
-  language folder such as `python/` when a matching file is read or edited (see
+- **Rules.** The rules are in `~/agents/rules/`: `common.md` loads in every session, a
+  language file such as `python.md` when a matching file is read or edited (see
   "Installation"). The skills point at a rule by file and section and do not change the
   rules.
 - **Files** go into the project's `specs/`, which is usually git-ignored and exists only
@@ -116,7 +116,7 @@ How rules load:
   Run `/hooks` in Codex once to trust the hooks; until then Codex loads no rules.
 - After a compaction, each harness delivers the rules again on the next match.
 - Rules load only for files inside the working directory. Throwaway scripts go to a
-  scratch directory outside the project (`common/shell.md`), so they load no language
+  scratch directory outside the project (`common.md`, section Shell), so they load no language
   rules.
 - A shell command counts when it names the file: as an argument that exists, or, in
   Codex, as the target of `>`. A path built at run time (`$dir/a.py`), or a file a script

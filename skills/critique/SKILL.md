@@ -11,7 +11,7 @@ Arguments: the material (a path, a diff range, or "this discussion"), and option
 number of reviewers, the number of discussion rounds and a focus. The argument `stage`
 runs the short form inside `implement` (see the last section).
 
-Read `core.md` and `communication.md` in `~/agents/rules/common/`.
+Read `~/agents/rules/common.md`.
 
 ## Findings
 
@@ -80,7 +80,7 @@ Every reviewer reports findings in this form:
 
 - Be harsh. Look for errors, contradictions, claims without support, and nitpicks.
 - Being harsh about errors does not mean asking for more code. A finding that asks for
-  more validation, defensive code or abstraction is weighed against `core.md`, sections
+  more validation, defensive code or abstraction is weighed against `common.md`, sections
   Minimal code and Validation, and is dropped where they argue against it.
 - A finding against a decision of the user names the new information that reopens it.
 - Change no file.

@@ -27,7 +27,7 @@ workplan is optional.
 
 The templates are in `~/agents/skills/spec/templates/`.
 
-Read `core.md` and `communication.md` in `~/agents/rules/common/`, and the rule files of the
+Read `~/agents/rules/common.md`, and the rule files of the
 area the work touches.
 
 ## Steps
@@ -54,7 +54,7 @@ area the work touches.
      to change later and no option is clearly better.
    - **Ask** when the options differ in what the user gets, when it is costly to
      undo, or when it is a new file format, naming scheme, directory layout or config
-     key (`core.md`, Decisions); one that follows an existing scheme is not new.
+     key (`common.md`, Decisions); one that follows an existing scheme is not new.
 
    Open each round with the decisions you took, one line each with its reason, so the
    user can overturn any. Then ask the questions whose prerequisites are settled, the

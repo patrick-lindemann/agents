@@ -5,9 +5,9 @@ roles, for Claude Code, Codex and Pi. Other places only link here or hold genera
 copies. Nothing in it is specific to one machine.
 
 ## Layout
-- `rules/`: `common/` holds the rules for all work; one folder per language
-  (`python/`, …) holds a module per kind of code; `workflows/` holds the rules of a task
-  that a file marks, such as `CHANGELOG.md`.
+- `rules/`: `common.md` holds the rules for all work, one file per language
+  (`python.md`, …) the rules of that language with a section per kind of code, and
+  `changelog.md` the rules of a file that marks a task.
 - `skills/`: skills, see `skills/README.md`. Write them for every harness: no tool name
   of one harness, only the words its "Harness words" table maps.
 - `roles/`: the subagent roles, one neutral file each: `name`, `description`, `tier`
@@ -26,20 +26,21 @@ copies. Nothing in it is specific to one machine.
 
 ## Writing rules
 
-The files in `common/` have no frontmatter and load at the start of every session; keep
-them short. Every other module starts with `paths:` frontmatter, a list of globs relative
-to the project root, and loads only when a matching file is read or edited: `**/*.py`
-for `python/python.md`. A module that applies to only part of a language's code, such as
-`scientific.md`, says so in its first line, so that the model ignores it elsewhere. Put a
-new language in its own folder. A rule that holds for every language goes into
-`common/`, and the language folder adds only what is specific to it: `common/docs.md`
-says what a comment may say, `python/python.md` the docstring format. Every harness
-loads a module without `paths:` in every session, so the rules of a task that no file
-marks, such as a release, go next to the skill that runs it
+`common.md` has no frontmatter and loads at the start of every session; keep it short.
+Every other file starts with `paths:` frontmatter, a list of globs relative to the project
+root, and loads only when a matching file is read or edited: `**/*.py` for `python.md`.
+Each language is one file (`python.md`, later `typescript.md`, `elixir.md`): first the
+section "All <language> code", then one section per kind of code (libraries, tests,
+scripts, scientific code …) that opens with the code it applies to, so that the model
+ignores it elsewhere. Split a file only where the globs that load it differ by language.
+A rule that holds for every language goes into `common.md`, and a language file adds only
+what is specific to it: `common.md` says what a comment may say, `python.md` the
+docstring format. Every harness loads a file without `paths:` in every session, so the
+rules of a task that no file marks, such as a release, go next to the skill that runs it
 (`skills/release/rules/release.md`), not into `rules/`.
 
 **Structure:**
-- Write `# Title`, then `## Topic` sections. One module covers one kind of code.
+- Write `# Title`, then `## Kind of code` sections with `### Topic` subsections.
 - Write imperative bullets: "Name counts `num_<things>`." Give one requirement per
   bullet, or a tight group with one subject.
 - Use no IDs and no MUST/SHOULD/MAY. A default reads "Prefer …"; everything else is a
@@ -49,7 +50,8 @@ marks, such as a release, go next to the skill that runs it
   "…, so that it can be inspected in a debugger."
 - Write in plain, self-contained words, and make each rule checkable by a tool, a test
   or a concrete review criterion.
-- Keep each file under 200 lines, since longer files reduce adherence.
+- Keep each section short; a language file loads whole, so every line costs tokens in
+  every session that touches the language.
 
 **Examples:**
 - Put examples inline in backticks; a code block only where words fail, at most 6 lines.
@@ -58,13 +60,13 @@ marks, such as a release, go next to the skill that runs it
   - services: `User`, `Order`, `fetch_user`, `timeout` in seconds, `max_retries`;
   - ML: `Classifier`, `Sampler`/`GreedySampler`, `ImageDataset`, `num_classes`, `batch`;
   - files: `load_image`, `save_report`, `image.py`, `IMAGE_SUFFIX`;
-  - math, in `numerics.md` only: `so3.exp(phi)`, `theta`, `R`.
+  - math, in the scientific section only: `so3.exp(phi)`, `theta`, `R`.
 
 **Placement:**
-- Refer to no other module. A rule that two modules need goes into `core.md` or the
-  language module (`python.md`). A specific module states its own override of the
-  language module; `core.md` says that specific modules win. No rule contradicts one of
-  higher precedence.
+- Refer to no other file. A rule that two sections need goes into `common.md` or the
+  "All <language> code" section. A section for a kind of code states its own override:
+  "Overriding "All Python code", …"; `common.md` says that such sections win. No rule
+  contradicts one of higher precedence.
 - Admit a rule only if it holds in both an ML repository and a web service. A
   convention of one project goes into that project's `AGENTS.md`.
 - Write nothing that ruff, the type checker or the settings enforce;
