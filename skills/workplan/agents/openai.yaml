@@ -1,5 +1,2 @@
-interface:
-  display_name: "Workplan"
-  short_description: "Split a spec into stages and packages"
 policy:
   allow_implicit_invocation: false

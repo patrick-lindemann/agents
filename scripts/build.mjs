@@ -2,11 +2,12 @@
 // Generate the per-harness files of this repository; scripts/install.sh calls it.
 //
 //   build.mjs roles <out> [harness ...]   write <out>/<harness>/agents/ from roles/
+//   build.mjs skills                      write skills/*/agents/openai.yaml for Codex
 //   build.mjs unblock <file> <name>       remove the generated block <name> from <file>
 //
 // Node standard library only.
 
-import { existsSync, mkdirSync, readdirSync, readFileSync, unlinkSync, writeFileSync } from "node:fs";
+import { existsSync, mkdirSync, readdirSync, readFileSync, rmSync, unlinkSync, writeFileSync } from "node:fs";
 import { homedir } from "node:os";
 import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -46,8 +47,8 @@ function piHasWebTools() {
 	return (settings.packages ?? []).some((pkg) => JSON.stringify(pkg).includes("pi-web-access"));
 }
 
-// The flat frontmatter of a role: `key: value`, quoted values as JSON, and `  - item`
-// lists.
+// The flat frontmatter of a role or skill: `key: value`, quoted values as JSON, and
+// `  - item` lists. Nested keys such as those under `metadata:` are read as top-level keys.
 function splitFrontMatter(text) {
 	const match = /^---\n([\s\S]*?)\n---\n([\s\S]*)$/.exec(text);
 	if (!match) return [{}, text];
@@ -151,6 +152,32 @@ function buildRoles(out, selected) {
 	}
 }
 
+// Codex reads the name, description and metadata.short-description from SKILL.md itself.
+// Only a user-invoked skill needs the file, for its policy.
+function buildSkills() {
+	const directory = join(repo, "skills");
+	for (const skill of readdirSync(directory).sort()) {
+		const skillFile = join(directory, skill, "SKILL.md");
+		if (!existsSync(skillFile)) continue;
+		const [fields] = splitFrontMatter(readFileSync(skillFile, "utf8"));
+		const agentsDir = join(directory, skill, "agents");
+		const path = join(agentsDir, "openai.yaml");
+		if (fields["disable-model-invocation"] !== "true") {
+			if (existsSync(path)) {
+				unlinkSync(path);
+				if (readdirSync(agentsDir).length === 0) rmSync(agentsDir, { recursive: true });
+				console.log(`remove ${path}`);
+			}
+			continue;
+		}
+		const text = "policy:\n  allow_implicit_invocation: false\n";
+		if (existsSync(path) && readFileSync(path, "utf8") === text) continue;
+		mkdirSync(agentsDir, { recursive: true });
+		writeFileSync(path, text);
+		console.log(`write ${path}`);
+	}
+}
+
 function removeBlock(file, name) {
 	const path = file.replace(/^~(?=\/|$)/, homedir());
 	if (!existsSync(path)) return;
@@ -169,8 +196,9 @@ function removeBlock(file, name) {
 
 const [command, ...args] = process.argv.slice(2);
 if (command === "roles") buildRoles(args[0], args.slice(1));
+else if (command === "skills") buildSkills();
 else if (command === "unblock") removeBlock(args[0], args[1]);
 else {
-	console.error("usage: build.mjs roles <out> [harness ...] | unblock <file> <name>");
+	console.error("usage: build.mjs roles <out> [harness ...] | skills | unblock <file> <name>");
 	process.exit(2);
 }

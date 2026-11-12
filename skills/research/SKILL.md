@@ -2,6 +2,8 @@
 name: research
 description: "Research papers, released code and documentation, to answer how to implement something or to survey the state of the art for a model. Cited, with a recommendation. Use when the user asks for research, papers, the state of the art, or how a published method is implemented."
 argument-hint: "<question>"
+metadata:
+  short-description: "Cited research with a recommendation"
 ---
 
 Answer a question from primary sources: papers, the authors' released code, and

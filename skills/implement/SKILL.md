@@ -2,6 +2,8 @@
 name: implement
 description: "Implement an approved spec, or a stage of a big one, without asking, then have it reviewed once and report."
 argument-hint: "<spec | workplan> [stage]"
+metadata:
+  short-description: "Implement a stage and report"
 disable-model-invocation: true
 ---
 

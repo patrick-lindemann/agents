@@ -2,6 +2,8 @@
 name: revise
 description: "Turn your review notes on agent-written code into fixes and lasting rules."
 argument-hint: "<notes> | session"
+metadata:
+  short-description: "Turn review notes into fixes and rules"
 disable-model-invocation: true
 ---
 

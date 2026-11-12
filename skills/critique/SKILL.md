@@ -2,6 +2,8 @@
 name: critique
 description: "Harsh, independent review of a spec, workplan, diff, benchmark, report or research by two reviewer agents that discuss their findings. Use when the user asks for a critique, an independent review, reviewers, or a consensus. Not for a quick look at code."
 argument-hint: "<material> [reviewers=2] [rounds=2] [focus] | stage"
+metadata:
+  short-description: "Independent review by discussing reviewers"
 ---
 
 Review material with independent reviewer agents, let them discuss their findings, check

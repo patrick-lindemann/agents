@@ -2,6 +2,8 @@
 name: save
 description: "Save the current report, review, research or discussion to a Markdown file in specs/. Use when the user asks to save, write down or file something from the chat. Not on your own initiative."
 argument-hint: "[path] [what to write]"
+metadata:
+  short-description: "Save the last report to specs/"
 ---
 
 Save what was shown in the chat to a Markdown file in the project's `specs/`.

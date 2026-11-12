@@ -1,5 +1,2 @@
-interface:
-  display_name: "Release"
-  short_description: "Prepare a release commit and its pull request"
 policy:
   allow_implicit_invocation: false

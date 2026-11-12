@@ -2,6 +2,8 @@
 name: release
 description: "Prepare a release: pick the version, update the changelog and version files, commit, and open the release pull request or hand over the push and tag commands."
 argument-hint: "[version]"
+metadata:
+  short-description: "Prepare a release commit and its pull request"
 disable-model-invocation: true
 ---
 

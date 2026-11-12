@@ -2,6 +2,8 @@
 name: setup
 description: "Bring a project's AGENTS.md, CLAUDE.md and tool settings in line with the shared rules; on a project already set up, bring them up to date."
 argument-hint: ""
+metadata:
+  short-description: "Link the shared rules into a project, or update them"
 disable-model-invocation: true
 ---
 

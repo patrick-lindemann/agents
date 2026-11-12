@@ -2,6 +2,8 @@
 name: spike
 description: "Try a design as a throwaway patch and measure it, before it goes into a spec."
 argument-hint: "<design question>"
+metadata:
+  short-description: "Try a design as a measured patch"
 disable-model-invocation: true
 ---
 

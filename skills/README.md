@@ -82,9 +82,15 @@ tables below map their words to each harness.
 
 ## Installation
 
-Run `~/agents/scripts/install.sh` once per machine, and again after adding or removing a
-skill or a role, or after changing a role. The skills always go
-into `~/.agents/skills/`. The rest goes to each harness that is installed, that is whose
+On a new machine, clone the repository and run its install script once; it needs node:
+
+```sh
+git clone git@github.com:patrick-lindemann/agents.git ~/agents && ~/agents/scripts/install.sh
+```
+
+The script installs a `post-merge` hook in the checkout that runs it again after every
+pull. Run it by hand after adding or removing a skill or a role, or after changing a
+role or the frontmatter of a skill. The skills always go into `~/.agents/skills/`. The rest goes to each harness that is installed, that is whose
 command is on `PATH` or whose config directory exists, or to those given with
 `--harness claude,codex,pi`; a harness that is not installed is skipped, and its
 directory is not created:
@@ -122,6 +128,10 @@ How rules load:
   Codex, as the target of `>`. A path built at run time (`$dir/a.py`), or a file a script
   writes, is not seen.
 
-A user-invoked skill carries `disable-model-invocation: true` in its frontmatter for
-Claude Code and Pi, and `policy.allow_implicit_invocation: false` in `agents/openai.yaml`
-for Codex.
+The frontmatter of `SKILL.md` is the only place for a skill's metadata. A user-invoked
+skill carries `disable-model-invocation: true`, which Claude Code and Pi read, and
+`metadata.short-description` is the short text of Codex's skill list. Codex reads the
+invocation policy only from `agents/openai.yaml`, so `install.sh` generates that file
+with `policy.allow_implicit_invocation: false` for each user-invoked skill. The file is
+committed, so that a fresh clone is right before the first install; commit it when the
+script changes it.

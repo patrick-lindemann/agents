@@ -1,5 +1,2 @@
-interface:
-  display_name: "Revise"
-  short_description: "Turn review notes into fixes and rules"
 policy:
   allow_implicit_invocation: false

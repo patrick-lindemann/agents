@@ -2,6 +2,8 @@
 name: workplan
 description: "Optionally split an approved medium or big spec into work packages for the user to approve before implementing."
 argument-hint: "<path of the spec>"
+metadata:
+  short-description: "Split a spec into stages and packages"
 disable-model-invocation: true
 ---
 

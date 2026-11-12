@@ -1,5 +1,2 @@
-interface:
-  display_name: "Handover"
-  short_description: "Give the session as a prompt for a fresh agent"
 policy:
   allow_implicit_invocation: false

@@ -2,6 +2,8 @@
 name: explain
 description: "Explain an answer, spec, plan, code, research or session in plain technical English."
 argument-hint: "[what] [plain | code | status]"
+metadata:
+  short-description: "Explain again, in plain words"
 disable-model-invocation: true
 ---
 

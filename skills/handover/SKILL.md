@@ -2,6 +2,8 @@
 name: handover
 description: "Give the session as a prompt in the chat that a fresh agent can continue from."
 argument-hint: "[what the next session is for] [file]"
+metadata:
+  short-description: "Give the session as a prompt for a fresh agent"
 disable-model-invocation: true
 effort: low
 ---

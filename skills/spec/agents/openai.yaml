@@ -1,5 +1,2 @@
-interface:
-  display_name: "Spec"
-  short_description: "Plan work as a small, medium or big spec"
 policy:
   allow_implicit_invocation: false

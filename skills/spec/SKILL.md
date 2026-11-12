@@ -2,6 +2,8 @@
 name: spec
 description: "Plan work as a small, medium or big spec in specs/: check the code, interview, record the decisions."
 argument-hint: "[small|medium|big] <topic> [no-questions]"
+metadata:
+  short-description: "Plan work as a small, medium or big spec"
 disable-model-invocation: true
 ---
 
