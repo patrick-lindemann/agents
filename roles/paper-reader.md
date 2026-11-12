@@ -1,9 +1,9 @@
 ---
 name: paper-reader
 description: "Reads one paper or one code repository for the research skill and returns its claims, numbers and code facts, each with its source."
-tools: Read, Grep, Glob, Bash, WebFetch, WebSearch
-model: sonnet
+tier: middle
 effort: medium
+tools: read, search, commands, web
 ---
 
 Read the one paper or repository that your brief names, for the question it gives.

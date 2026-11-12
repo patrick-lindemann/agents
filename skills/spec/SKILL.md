@@ -25,7 +25,7 @@ required:
 Every spec states its acceptance criteria, so that `implement` can build it directly; a
 workplan is optional.
 
-The templates are in `~/.claude/skills/spec/templates/`.
+The templates are in `~/agents/skills/spec/templates/`.
 
 Read `core.md` and `communication.md` in `~/agents/rules/`, and the rule files of the
 area the work touches.
@@ -58,7 +58,7 @@ area the work touches.
 
    Open each round with the decisions you took, one line each with its reason, so the
    user can overturn any. Then ask the questions whose prerequisites are settled, the
-   most consequential first, with the AskUserQuestion tool: at most 4 per call, 2 to 4
+   most consequential first, with the question tool: at most 4 per call, 2 to 4
    options each, your recommendation first with "(Recommended)" in its label and the
    reason in its description. Where no such tool exists, number the questions in text,
    each with its recommended answer, worded so that "yes" accepts it.
@@ -66,7 +66,7 @@ area the work touches.
    Keep a small spec to one call of at most 4 questions, and a medium or big one to
    about 8 questions. If more remain, the size is too small: say so and recommend the
    next size, or ask the questions that block the rest and take the others yourself.
-   Where a question needs published methods, call the Skill tool with "research". Skip
+   Where a question needs published methods, run the skill "research". Skip
    this step under `no-questions`. Done when no question is left that an implementer
    would have to ask, or when the user ends the interview.
 
@@ -92,7 +92,7 @@ area the work touches.
    Done when the files exist, every decision in them has a date, and every spec file or
    stage concept has its criteria.
 
-7. **Check.** For a small spec, call the Skill tool with "critique", naming the spec,
+7. **Check.** For a small spec, run the skill "critique", naming the spec,
    `rounds=1`, and the focus "questions an implementer would still have to ask, false
    statements about the code, and criteria that cannot be shown by a command". For a
    medium or big spec, offer that critique with the question tool, with the focus

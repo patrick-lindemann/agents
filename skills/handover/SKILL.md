@@ -19,7 +19,7 @@ the session does not show.
 
 ## Steps
 
-1. **Collect** the items of `~/.claude/skills/handover/templates/handover.md`: the goal,
+1. **Collect** the items of `~/agents/skills/handover/templates/handover.md`: the goal,
    the state, the decisions with the user's words, the open points, the next step, the
    skills the next session should use, and the pointers. Point at specs, commits and
    files by path instead of copying them. Done when each item is filled or marked

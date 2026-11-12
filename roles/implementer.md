@@ -1,8 +1,9 @@
 ---
 name: implementer
 description: "Implementer of one work package for the implement skill: builds it to the spec, shows each acceptance criterion, and answers the stage review."
-model: opus
+tier: strong
 effort: medium
+tools: all
 ---
 
 You implement one work package of a spec. Your brief gives the

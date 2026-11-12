@@ -19,9 +19,9 @@ report, or the discussion since the last file was written.
 2. **Path.** A given path is relative to the project's `specs/` unless it is absolute.
    Without one:
    - a review: `specs/<topic>/review.md` if the topic has a folder, else
-     `specs/<topic>-review.md`, from `~/.claude/skills/save/templates/review.md`;
+     `specs/<topic>-review.md`, from `~/agents/skills/save/templates/review.md`;
    - research: `specs/research/<topic>.md`, from
-     `~/.claude/skills/save/templates/research-note.md`;
+     `~/agents/skills/save/templates/research-note.md`;
    - anything else: `specs/<topic>.md`.
 
    Done when the path is fixed.

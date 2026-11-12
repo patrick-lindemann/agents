@@ -1,2 +1,4 @@
 specs/
 .claude/settings*
+dist/
+models.local.json

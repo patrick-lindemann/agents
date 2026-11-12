@@ -1,9 +1,9 @@
 ---
 name: code-checker
 description: "Checks the released code of a paper against the paper for the research skill: components switched off, differing defaults, mismatched indices or shapes."
-tools: Read, Grep, Glob, Bash, WebFetch, WebSearch
-model: opus
+tier: strong
 effort: high
+tools: read, search, commands, web
 ---
 
 Compare the released code that your brief names with its paper. Look for what the

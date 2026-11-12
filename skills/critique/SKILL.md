@@ -70,7 +70,7 @@ Every reviewer reports findings in this form:
    for one, through the `save` skill; say so in one line at the end.
 
 6. **Decide.** When the user started the critique, ask the "What to decide" items with
-   AskUserQuestion: at most 4 per call, 2 to 4 options each, the recommendation first
+   the question tool: at most 4 per call, 2 to 4 options each, the recommendation first
    with "(Recommended)" in its label and the reason in its description. Where no such
    tool exists, the numbered table stands. When another skill started the critique,
    leave the questions to that skill. Done when the user has answered, or the questions

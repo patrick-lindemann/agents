@@ -2,7 +2,8 @@
 # Link core.md, python.md and the given modules into <project>/.claude/rules/, and remove
 # links to modules no longer given or no longer existing. The links stay out of the
 # project's git through its .git/info/exclude, since they point into this machine's
-# checkout.
+# checkout. For the harnesses that load no .claude/rules/ (Codex, Pi), write the same
+# list, with when to read each module, into a marked block of <project>/AGENTS.md.
 #
 # Usage: link-rules.sh <project> [module ...]   e.g. link-rules.sh . tests arrays pytorch
 #        link-rules.sh --list                    list the modules
@@ -70,3 +71,6 @@ if git -C "$project" rev-parse --git-dir >/dev/null 2>&1; then
         grep -qxF "$line" "$exclude" || echo "$line" >>"$exclude"
     done
 fi
+
+python3 -I "$repo/scripts/build.py" project-rules "${selected[@]}" \
+    | python3 -I "$repo/scripts/build.py" block "$project/AGENTS.md" shared-rules

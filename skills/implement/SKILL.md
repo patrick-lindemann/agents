@@ -41,17 +41,18 @@ the project's `AGENTS.md` and the rules in `~/agents/rules/`.
   commit. Elsewhere the work stays uncommitted, and the report lists its files.
 - **Subagents** get the spec, the package, the rule files of their task, the protected
   paths and the commit rule. Check their claims before building on them.
-- **The question tool** is AskUserQuestion: at most 4 questions per call, 2 to 4 options
-  each, your recommendation first with "(Recommended)" in its label and the reason in
-  its description. Where no such tool exists, number the questions in text, each with
-  its recommended answer, worded so that "yes" accepts it.
+- **The question tool** is the harness's tool for structured questions (see
+  `~/agents/skills/README.md`): at most 4 questions per call, 2 to 4 options each, your
+  recommendation first with "(Recommended)" in its label and the reason in its
+  description. Where no such tool exists, number the questions in text, each with its
+  recommended answer, worded so that "yes" accepts it.
 
 ## Steps
 
 1. **Baseline.** Read the spec, the workplan if there is one, `core.md`,
    `communication.md` and `git.md`, the rule files for the code the stage touches, and
-   the project's `AGENTS.md` and `CLAUDE.md`. Create the report from
-   `~/.claude/skills/implement/templates/stage-report.md`, or continue the existing one,
+   the project's `AGENTS.md`. Create the report from
+   `~/agents/skills/implement/templates/stage-report.md`, or continue the existing one,
    and note the commit the stage starts from. Without a workplan, draft the packages of
    the stage into the report's "Packages": one for a small spec, otherwise one concern
    per package, each with what it delivers and the spec's criteria it shows, which
@@ -70,7 +71,7 @@ the project's `AGENTS.md` and the rules in `~/agents/rules/`.
       section of the report, and commit the package or list its files. Done when the
       section is complete and the checks pass, or their failure is reported.
 
-3. **Review.** Once every package is closed, call the Skill tool with "critique",
+3. **Review.** Once every package is closed, run the skill "critique",
    argument `stage`, on the diff of the stage since its starting commit, together with
    uncommitted changes. Give the findings to an implementer subagent: continue the last
    one, or start one with the report. It answers each finding: fixed, rejected with the

@@ -20,7 +20,7 @@ the spec. Its extent follows the spec's size:
 Argument: the path of the spec folder or file.
 
 Read `core.md`, `communication.md` and `git.md` in `~/agents/rules/`, and the project's
-`AGENTS.md` and `CLAUDE.md`.
+`AGENTS.md`.
 
 ## Steps
 
@@ -40,18 +40,18 @@ Read `core.md`, `communication.md` and `git.md` in `~/agents/rules/`, and the pr
    of its criteria.
 
 3. **Ask.** Show the stages and packages to the user as a numbered list, and ask with
-   AskUserQuestion whether their size and order are right, with your recommendation
+   the question tool whether their size and order are right, with your recommendation
    first. A missing decision, a change to the list of stages, or a medium spec that
    needs more than one stage goes back to the spec: tell the user to run `/spec` on it.
    Done when the user approves the breakdown.
 
-4. **Write.** Write the workplan from `~/.claude/skills/workplan/templates/workplan.md`.
+4. **Write.** Write the workplan from `~/agents/skills/workplan/templates/workplan.md`.
    Its "Rules for every package" name the protected paths, the checks to run, and the
    commit rule of the project's `AGENTS.md`: one commit per package where the agent may
    commit, otherwise uncommitted. Add the risks and what is not in the plan. Done when
    the file exists: `specs/<topic>/workplan.md`.
 
-5. **Check.** Offer a critique with the question tool. If the user accepts, call the Skill tool with "critique",
+5. **Check.** Offer a critique with the question tool. If the user accepts, run the skill "critique",
    naming the workplan and the focus "do the packages reach each stage's goal, and can
    every criterion be shown by a command". Take the clear findings yourself and name
    them; ask the rest with the question tool. Done when the user declines, or its
