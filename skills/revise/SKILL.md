@@ -15,8 +15,8 @@ Arguments: the notes. With `session` instead, look back over the whole session f
 went wrong: the mistakes, the user's corrections, and the instructions the user gave more
 than once.
 
-Read `~/agents/rules/common.md`, and the rule files
-for the code the notes are about.
+Read `~/agents/rules/shared/common.md`, `~/agents/rules/shared/code.md`, and the rule
+files for the code the notes are about.
 
 ## Steps
 

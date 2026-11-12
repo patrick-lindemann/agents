@@ -52,7 +52,8 @@ the project's `AGENTS.md` and the rules in `~/agents/rules/`.
 ## Steps
 
 1. **Baseline.** Read the spec, the workplan if there is one,
-   `~/agents/rules/common.md`, the rule files for the code the stage touches, and
+   `~/agents/rules/shared/common.md`, `~/agents/rules/shared/code.md`, the rule files
+   for the code the stage touches, and
    the project's `AGENTS.md`. Create the report from
    `~/agents/skills/implement/templates/stage-report.md`, or continue the existing one,
    and note the commit the stage starts from. Without a workplan, draft the packages of

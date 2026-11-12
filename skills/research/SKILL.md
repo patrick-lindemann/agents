@@ -13,7 +13,7 @@ documentation. Two cases:
 - **survey**: the state of the art for a model that the user wants to implement.
 
 Argument: the question. Run in the background where the harness allows, so that the user
-can keep working. Write as section Communication of `~/agents/rules/common.md` says.
+can keep working. Write as section Communication of `~/agents/rules/shared/common.md` says.
 
 ## Roles
 

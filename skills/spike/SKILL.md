@@ -21,7 +21,7 @@ Argument: the design question.
    when this is in the chat.
 
 2. **Build.** Clone the repository at `HEAD` into the scratch directory (`common.md` in
-   `~/agents/rules/`, section Shell) and build the design there, as small as answers the
+   `~/agents/rules/shared/`, section Shell) and build the design there, as small as answers the
    question. Run the tests that it touches. Done when `git diff HEAD` in the clone gives
    a patch that applies to the project's `HEAD`.
 

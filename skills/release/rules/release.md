@@ -1,8 +1,5 @@
 # Release
 
-<!-- Kept with the release skill, outside rules/, since every harness loads a rule
-without `paths:` in every session. -->
-
 ## Flows
 A project releases in one of two flows; its `AGENTS.md` or `CONTRIBUTING.md` names it,
 else a `develop` branch means the pull request flow.

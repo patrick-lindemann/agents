@@ -17,7 +17,7 @@ Arguments: what to explain (by default your last answer), and the level:
 The default is `code` where the topic is code, and `plain` otherwise. With `status`,
 sum up what was said in a plan, spec or session instead.
 
-Write as section Communication of `~/agents/rules/common.md` says.
+Write as section Communication of `~/agents/rules/shared/common.md` says.
 
 ## Steps
 

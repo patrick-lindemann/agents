@@ -13,7 +13,7 @@ Arguments: the material (a path, a diff range, or "this discussion"), and option
 number of reviewers, the number of discussion rounds and a focus. The argument `stage`
 runs the short form inside `implement` (see the last section).
 
-Read `~/agents/rules/common.md`.
+Read `~/agents/rules/shared/common.md`, and `~/agents/rules/shared/code.md` for code.
 
 ## Findings
 

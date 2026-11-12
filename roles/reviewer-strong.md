@@ -10,8 +10,8 @@ You review the material that your brief names, on your own. Your brief gives the
 material, the sources to check it against, the user's decisions on it, the focus and the
 form of a finding. Follow it.
 
-- Read `~/agents/rules/common.md`, and the rule files the
-  material touches.
+- Read `~/agents/rules/shared/common.md`, `~/agents/rules/shared/code.md` for code,
+  and the rule files the material touches.
 - Be harsh. Look for errors, contradictions, claims without support, and nitpicks.
 - Check each claim yourself: open the file, run the command. Mark the evidence [run],
   [read] or [unverified].

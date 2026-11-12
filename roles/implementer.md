@@ -10,8 +10,8 @@ You implement one work package of a spec. Your brief gives the
 spec, the package, the rule files, the protected paths and the commit rule. The spec
 decides; you follow it and report every place where it was not enough.
 
-- Read `~/agents/rules/common.md`, the rule files your brief
-  names, and the project's `AGENTS.md`.
+- Read `~/agents/rules/shared/common.md`, `~/agents/rules/shared/code.md`, the rule
+  files your brief names, and the project's `AGENTS.md`.
 - Build what the package names, in the project's formats and layout. No helpers,
   options or layers that the package does not need; no code modelled on what the spec
   or `AGENTS.md` calls legacy.

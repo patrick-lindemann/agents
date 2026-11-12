@@ -29,7 +29,7 @@ workplan is optional.
 
 The templates are in `~/agents/skills/spec/templates/`.
 
-Read `~/agents/rules/common.md`, and the rule files of the
+Read `~/agents/rules/shared/common.md`, and the rule files of the
 area the work touches.
 
 ## Steps

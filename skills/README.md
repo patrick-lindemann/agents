@@ -35,10 +35,11 @@ The user, the model or another skill starts these.
 The skills run in Claude Code, Codex and Pi. They name no tool of one harness; the
 tables below map their words to each harness.
 
-- **Rules.** The rules are in `~/agents/rules/`: `common.md` loads in every session, a
-  language file such as `python.md` when a matching file is read or edited (see
-  "Installation"). The skills point at a rule by file and section and do not change the
-  rules.
+- **Rules.** The rules are in `~/agents/rules/`, one folder per context:
+  `shared/common.md` loads in every session, the other files when a matching file is
+  read or edited: `shared/code.md` for any code, `python/common.md` for Python,
+  `python/tests.md` for its tests (see "Installation"). The skills point at a rule by
+  file and section and do not change the rules.
 - **Files** go into the project's `specs/`, which is usually git-ignored and exists only
   in the main checkout. A skill's templates are in `~/agents/skills/<skill>/templates/`.
 - **Harness words.** What a skill says, and what it is in each harness:
@@ -106,9 +107,9 @@ wherever it is. Rules need no install step after an edit: every harness reads th
 the checkout.
 
 How rules load:
-- **Claude Code** loads `~/.claude/rules/` natively: a rule without `paths:` at the start
-  of a session, one with `paths:` when a matching file is read or edited. Globs match the
-  path relative to the working directory.
+- **Claude Code** loads `~/.claude/rules/` natively, subfolders included: a rule without
+  `paths:` at the start of a session, one with `paths:` when a matching file is read or
+  edited. Globs match the path relative to the working directory.
 - **Pi** reads the same folder through the extension `@jordyvanvorselen/pi-claude-rules`,
   pinned in `install.sh`, with `bashActivation` on (`harnesses/pi/claude-rules.json`). A
   matching read, by the read tool or a reading bash command, gets the rules in its result;
@@ -122,7 +123,7 @@ How rules load:
   Run `/hooks` in Codex once to trust the hooks; until then Codex loads no rules.
 - After a compaction, each harness delivers the rules again on the next match.
 - Rules load only for files inside the working directory. Throwaway scripts go to a
-  scratch directory outside the project (`common.md`, section Shell), so they load no language
+  scratch directory outside the project (`shared/common.md`, section Shell), so they load no language
   rules.
 - A shell command counts when it names the file: as an argument that exists, or, in
   Codex, as the target of `>`. A path built at run time (`$dir/a.py`), or a file a script

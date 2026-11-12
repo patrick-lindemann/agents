@@ -8,7 +8,7 @@ disable-model-invocation: true
 ---
 
 Set up the current project for the shared rules in `~/agents/rules/`. The rules need no
-setup: every harness loads `common.md` always and a language's rules when a matching file
+setup: every harness loads `shared/common.md` always and the other rules when a matching file
 is read or edited. This skill checks the project files the rules rely on.
 
 ## Steps

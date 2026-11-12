@@ -21,7 +21,7 @@ the spec. Its extent follows the spec's size:
 
 Argument: the path of the spec folder or file.
 
-Read `~/agents/rules/common.md`, and the project's
+Read `~/agents/rules/shared/common.md`, and the project's
 `AGENTS.md`.
 
 ## Steps
