@@ -4,9 +4,10 @@
 #
 # Rules: rules/ is linked to ~/.claude/rules/agents. Claude Code loads it natively: a
 # rule without `paths:` always, one with `paths:` when a matching file is read or edited.
-# Pi reads the same folder through the pi-claude-rules extension, and Codex through
-# harnesses/codex/rules-hook.mjs; both block the first edit of a matching file until its
-# rules are delivered.
+# Pi reads the same folder through the extension adapters/pi/extensions/rules, which adds the rules
+# to the result of the first matching tool call, as Claude Code does. Codex reads it
+# through adapters/codex/hooks/rules-hook.mjs, which blocks the first edit of a matching file
+# until its rules are delivered.
 #
 # Usage: install.sh [--harness claude,codex,pi]   default: every harness installed
 #
@@ -28,8 +29,6 @@ dist="$repo/dist"
 claude_dir="${CLAUDE_CONFIG_DIR:-$HOME/.claude}"
 codex_dir="${CODEX_HOME:-$HOME/.codex}"
 pi_dir="${PI_CODING_AGENT_DIR:-$HOME/.pi/agent}"
-# Pinned, so that an update cannot change how rules load unseen.
-pi_rules_package="npm:@jordyvanvorselen/pi-claude-rules@0.1.4"
 
 harnesses=""
 while [[ $# -gt 0 ]]; do
@@ -197,7 +196,7 @@ link_skills "$HOME/.agents/skills"
 if wants codex; then
     copy_codex_roles "$codex_dir/agents"
     node "$repo/scripts/build.mjs" unblock "$codex_dir/AGENTS.md" agents-rules
-    if node "$repo/harnesses/codex/add-hooks.mjs" "$codex_dir/hooks.json" | grep .; then
+    if node "$repo/adapters/codex/hooks/add-hooks.mjs" "$codex_dir/hooks.json" | grep .; then
         echo "codex: run /hooks once to trust the new rules hooks"
     fi
 fi
@@ -205,9 +204,6 @@ fi
 if wants pi; then
     link_roles pi "$pi_dir/agents"
     node "$repo/scripts/build.mjs" unblock "$pi_dir/AGENTS.md" agents-rules
-    if ! grep -q "pi-claude-rules" "$pi_dir/settings.json" 2>/dev/null; then
-        pi install "$pi_rules_package"
-    fi
-    # Also load rules for files that a bash command names, as the Codex hook does.
-    link "$repo/harnesses/pi/claude-rules.json" "$pi_dir/claude-rules.json"
+    mkdir -p "$pi_dir/extensions"
+    link "$repo/adapters/pi/extensions/rules" "$pi_dir/extensions/agents-rules"
 fi

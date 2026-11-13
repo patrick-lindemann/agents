@@ -17,8 +17,10 @@ copies. Nothing in it is specific to one machine.
   commands, web, edit).
 - `models.local.json` (git-ignored, optional): models for the tiers on this machine; see
   `skills/README.md`. Without it, every role runs on the session's model.
-- `harnesses/codex/`: the Codex hooks that load the rules, and the script that registers
-  them. `harnesses/pi/claude-rules.json`: the settings of Pi's rules extension.
+- `adapters/`: the code that connects each harness to the rules, one folder per harness
+  named after its own terms. `adapters/codex/hooks/`: the Codex hooks that load the
+  rules, and the script that registers them. `adapters/pi/extensions/rules/`: the Pi
+  extension that loads the rules.
 - `scripts/build.mjs`: generates the role files per harness into `dist/` (git-ignored),
   and each user-invoked skill's `agents/openai.yaml` for Codex (committed). Node
   standard library only.
@@ -80,8 +82,6 @@ task that no file marks, such as a release, go next to the skill that runs it
 - Write nothing that ruff, the type checker or the settings enforce;
   `skills/setup/templates/pyproject-tools.toml` lists what they enforce. Write
   nothing a model does by default; keep a line only if it answers an observed failure.
-- Write no `<!-- -->` comments in rule files: Pi's rules extension does not strip them.
-  Keep maintainer notes in this file or the commit message.
 
 ## Git
 - The agent does not commit unless the user asks; the user pushes.

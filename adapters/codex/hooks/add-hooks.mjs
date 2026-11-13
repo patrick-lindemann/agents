@@ -6,7 +6,7 @@
 import { readFileSync, writeFileSync } from "node:fs";
 
 const file = process.argv[2];
-const hook = 'node "$HOME/agents/harnesses/codex/rules-hook.mjs"';
+const hook = 'node "$HOME/agents/adapters/codex/hooks/rules-hook.mjs"';
 const wanted = [
 	{ event: "SessionStart", matcher: "startup|clear|compact", command: `${hook} session-start` },
 	{ event: "SubagentStart", command: `${hook} session-start` },
@@ -27,7 +27,10 @@ for (const { event, matcher, command } of wanted) {
 	// limit, by default 2,500 tokens.
 	const entry = { type: "command", command, timeout: 10, additionalContextLimit: 12000 };
 	const group = { ...(matcher ? { matcher } : {}), hooks: [entry] };
-	const index = groups.findIndex((existing) => existing.hooks?.some((hook) => hook.command === command));
+	// Matched by script name and argument rather than the full command, so that a hook
+	// registered from another path to this repository is replaced, not duplicated.
+	const ours = (other) => other?.endsWith(command.slice(command.lastIndexOf("/")));
+	const index = groups.findIndex((existing) => existing.hooks?.some((hook) => ours(hook.command)));
 	if (index >= 0 && JSON.stringify(groups[index]) === JSON.stringify(group)) continue;
 	if (index >= 0) groups[index] = group;
 	else groups.push(group);

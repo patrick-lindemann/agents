@@ -13,9 +13,6 @@ import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 
 const repo = resolve(dirname(fileURLToPath(import.meta.url)), "..");
-// Loaded into Pi subagents, which load no extensions of their own in the foreground, so
-// that they get the rules too.
-const piRulesPackage = "npm:@jordyvanvorselen/pi-claude-rules@0.1.4";
 
 // The neutral tool groups of a role, per harness. `all` omits the tool list.
 const claudeTools = {
@@ -33,6 +30,10 @@ const piTools = {
 	edit: ["edit", "write"],
 };
 const piDir = process.env.PI_CODING_AGENT_DIR ?? join(homedir(), ".pi/agent");
+// Loaded into Pi subagents, which load no extensions of their own in the foreground, so
+// that they get the rules too. The path is the one install.sh links, so that a background
+// child, which also discovers it there, loads it once.
+const piRulesExtension = join(piDir, "extensions", "agents-rules", "index.ts");
 // Optional, git-ignored: {"<harness>": {"<tier>": "<model>"}}. A tier without an entry
 // runs on the session's model.
 const modelsFile = join(repo, "models.local.json");
@@ -109,7 +110,7 @@ function piRole(role, model) {
 	}
 	if (model) lines.push(`model: ${model}`);
 	lines.push(
-		`subagentOnlyExtensions: ${piRulesPackage}`,
+		`subagentOnlyExtensions: ${piRulesExtension}`,
 		`thinking: ${role.effort}`,
 		"inheritProjectContext: true",
 		"inheritSkills: false",

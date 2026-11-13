@@ -100,7 +100,7 @@ directory is not created:
 |---|---|---|---|
 | Skills | `~/.claude/skills/` | `~/.agents/skills/` | `~/.agents/skills/` |
 | Roles | `~/.claude/agents/*.md` | `~/.codex/agents/*.toml` | `~/.pi/agent/agents/*.md` |
-| Rules | `~/.claude/rules/agents` | hooks in `~/.codex/hooks.json` | `pi-claude-rules`, from `~/.claude/rules/agents` |
+| Rules | `~/.claude/rules/agents` | hooks in `~/.codex/hooks.json` | `~/.pi/agent/extensions/agents-rules`, from `~/.claude/rules/agents` |
 
 It also links `~/agents` to the checkout, so the skills find the rules and templates
 wherever it is. Rules need no install step after an edit: every harness reads them from
@@ -110,13 +110,14 @@ How rules load:
 - **Claude Code** loads `~/.claude/rules/` natively, subfolders included: a rule without
   `paths:` at the start of a session, one with `paths:` when a matching file is read or
   edited. Globs match the path relative to the working directory.
-- **Pi** reads the same folder through the extension `@jordyvanvorselen/pi-claude-rules`,
-  pinned in `install.sh`, with `bashActivation` on (`harnesses/pi/claude-rules.json`). A
-  matching read, by the read tool or a reading bash command, gets the rules in its result;
-  the first edit, write or other bash command on a matching file is blocked until the
-  rules have reached the model. Pi subagents load the extension through
+- **Pi** reads the same folder, and `.claude/rules/` of the project, through the
+  extension `adapters/pi/extensions/rules`, as Claude Code does: the rules without `paths:` go into
+  the system prompt, and the first read, write, edit or bash command on a matching file
+  gets the matching rules appended to its result. Nothing is blocked and nothing is
+  shown in the terminal. A write or edit that ran before its rules were loaded is checked
+  against them afterwards. Pi subagents load the extension through
   `subagentOnlyExtensions` in their role file.
-- **Codex** runs `harnesses/codex/rules-hook.mjs`: `SessionStart` and `SubagentStart` give
+- **Codex** runs `adapters/codex/hooks/rules-hook.mjs`: `SessionStart` and `SubagentStart` give
   the rules without `paths:`; `PreToolUse` blocks the first `apply_patch` or shell
   command on a matching file and puts its rules into the context (`additionalContext`, up
   to 12,000 tokens per hook in `hooks.json`; a block reason would be cut at about 2,500).
