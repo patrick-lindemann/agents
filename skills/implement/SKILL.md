@@ -74,7 +74,7 @@ the project's `AGENTS.md` and the rules in `~/agents/rules/`.
       section of the report, and commit the package or list its files. Done when the
       section is complete and the checks pass, or their failure is reported.
 
-3. **Review.** Once every package is closed, run the skill "critique",
+3. **Review.** Once every package is closed, run the skill "review",
    argument `stage`, on the diff of the stage since its starting commit, together with
    uncommitted changes. Give the findings to an implementer subagent: continue the last
    one, or start one with the report. It answers each finding: fixed, rejected with the

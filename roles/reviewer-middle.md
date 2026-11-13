@@ -1,6 +1,6 @@
 ---
 name: reviewer-middle
-description: "Middle-tier reviewer for the critique skill: reviews a spec, workplan, diff, benchmark, report or research from a brief, harshly and on its own. Changes no file."
+description: "Middle-tier reviewer for the review skill: reviews a spec, workplan, diff, benchmark, report or research from a brief, harshly and on its own. Changes no file."
 tier: middle
 effort: high
 tools: read, search, commands, web

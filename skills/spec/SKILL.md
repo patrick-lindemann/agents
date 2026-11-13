@@ -15,7 +15,7 @@ Arguments: optionally the size, then the topic, and optionally `no-questions`, w
 writes down what the conversation already settled, without an interview. Without a size,
 choose one in step 2.
 
-The size sets the spec's files, the length of the interview and whether the critique is
+The size sets the spec's files, the length of the interview and whether the review is
 required:
 
 | Size | When | Spec |
@@ -94,16 +94,16 @@ area the work touches.
    Done when the files exist, every decision in them has a date, and every spec file or
    stage concept has its criteria.
 
-7. **Check.** For a small spec, run the skill "critique", naming the spec,
+7. **Check.** For a small spec, run the skill "review", naming the spec,
    `rounds=1`, and the focus "questions an implementer would still have to ask, false
    statements about the code, and criteria that cannot be shown by a command". For a
-   medium or big spec, offer that critique with the question tool, with the focus
+   medium or big spec, offer that review with the question tool, with the focus
    "questions an implementer would still have to ask", and run it if the user accepts.
    Settle the findings as in step 4: take the clear ones yourself and name them, one
    line each, and ask the rest with the question tool. For a small spec, add as the last
    question whether the spec is approved, and record the findings under "Review". Update
    the spec with every answer and set its status. Done when the user declined the
-   critique, or every finding is settled, and a small spec is approved or the user ended
+   review, or every finding is settled, and a small spec is approved or the user ended
    the planning.
 
 Then tell the user that `/implement specs/<topic>/spec.md` builds a small or medium

@@ -38,7 +38,7 @@ user rejected.>
 
 ## Review
 
-<The critique's findings, each with how it was settled: taken by the agent, decided by
+<The review's findings, each with how it was settled: taken by the agent, decided by
 the user, or rejected with the reason.>
 
 ## Proposed by the agent, not decided

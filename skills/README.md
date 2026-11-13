@@ -26,7 +26,7 @@ The user, the model or another skill starts these.
 
 | Skill | What it does |
 |---|---|
-| `critique` | Harsh, independent review by two reviewer agents that discuss their findings. |
+| `review` | Harsh, independent review by two reviewer agents that discuss their findings. |
 | `research` | Research papers, released code and documentation, cited, with a recommendation. |
 | `save` | Save the current report, review, research or discussion to a file in `specs/`, when the user asks. |
 
@@ -63,8 +63,8 @@ tables below map their words to each harness.
 
   | Role | Used by | Tier | Effort | Tools |
   |---|---|---|---|---|
-  | `reviewer-strong` | `critique`, and the stage review in `implement` | strong | high | read, search, commands, web; no edits |
-  | `reviewer-middle` | `critique` | middle | high | read, search, commands, web; no edits |
+  | `reviewer-strong` | `review`, and the stage review in `implement` | strong | high | read, search, commands, web; no edits |
+  | `reviewer-middle` | `review` | middle | high | read, search, commands, web; no edits |
   | `implementer` | `implement` | strong | medium | all |
   | `fact-finder` | `spec`, any skill | middle | medium | read, search |
   | `locator` | any skill | cheap | low | read, search |

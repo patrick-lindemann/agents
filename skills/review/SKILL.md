@@ -1,5 +1,5 @@
 ---
-name: critique
+name: review
 description: "Harsh, independent review of a spec, workplan, diff, benchmark, report or research by two reviewer agents that discuss their findings. Use when the user asks for a critique, an independent review, reviewers, or a consensus. Not for a quick look at code."
 argument-hint: "<material> [reviewers=2] [rounds=2] [focus] | stage"
 metadata:
@@ -71,10 +71,10 @@ Every reviewer reports findings in this form:
    Done when the report is in the chat. A file is written only when the user asks
    for one, through the `save` skill; say so in one line at the end.
 
-6. **Decide.** When the user started the critique, ask the "What to decide" items with
+6. **Decide.** When the user started the review, ask the "What to decide" items with
    the question tool: at most 4 per call, 2 to 4 options each, the recommendation first
    with "(Recommended)" in its label and the reason in its description. Where no such
-   tool exists, the numbered table stands. When another skill started the critique,
+   tool exists, the numbered table stands. When another skill started the review,
    leave the questions to that skill. Done when the user has answered, or the questions
    are left to the calling skill.
 
