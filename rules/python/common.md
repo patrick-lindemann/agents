@@ -29,13 +29,14 @@ paths:
 - A base class names the role (`Sampler`), variants prefix their distinction
   (`GreedySampler`), their module is plural (`samplers/`), a module of one type or format
   singular (`image.py`). `*Options` is a frozen group of settings, `*Error` an exception.
-- Constants for a config key, suffix, directory or file name end in `_KEY`, `_SUFFIX`,
-  `_DIR`, `_FILE`. Type parameters are `T` plus meaning: `TConfig`, never `ConfigT`.
-- Reserve `load_*`/`save_*` for a file format, `get_*` for a value that needs arguments
-  or a static accessor (`Clock.get_default()`), `validate_*` for a check that raises or
-  returns `None`, paired with an `is_*`, `make_*` for building a new object, `find_*` for
-  a search that may return `None`, `iter_*` for a generator, `resolve_*` for turning a
-  reference into what it names.
+- Constants for a config key, suffix, directory name or file name end in `_KEY`,
+  `_SUFFIX`, `_DIR_NAME`, `_FILE_NAME`. A constant ending in `_DIR` or `_FILE` is a
+  `Path`. Type parameters are `T` plus meaning: `TConfig`, never `ConfigT`.
+- Reserve `load_*`/`save_*` for reading and writing a file format, `get_*` for a value
+  that needs arguments or a static accessor (`Clock.get_default()`), `validate_*` for a
+  check that raises or returns `None`, paired with an `is_*`, `make_*` for building a new
+  object, `find_*` for a search that returns `None` when nothing is found, `iter_*` for a
+  generator and `resolve_*` for turning a reference into what it names.
 
 ## Types
 - Annotate every parameter and return, `-> None` included; a local only where the checker
@@ -88,9 +89,11 @@ paths:
 - Define no function inside another, except a decorator and a closure an API requires
   (`optimizer.step(closure)`). A callback is a bound method of the state's owner
   (`on_step=recorder.record`) or a module-level function; a short lambda may be passed.
-- Name the result of real work (a model, solver, query or service call) before passing it
-  on, so that a debugger can inspect it: `predictions = model(batch)`. Cheap calls stay
-  inline.
+- Name the result of real work (a model, solver, query or service call, a file read, a
+  parse) before passing it on, so that a debugger can inspect it and a traceback tells
+  the steps apart: `predictions = model(batch)`, then `evaluate(predictions, labels)`;
+  `config = OmegaConf.create(values)`, then `OmegaConf.to_yaml(config)`. Cheap calls
+  (`len`, getters, conversions) stay inline.
 - Use `match` with a raising `case _:` for a closed set; merge dicts with `|`, `|=`.
 - Stream results produced one at a time from a generator; the caller collects them.
 - Put private helpers at module level, after the public functions that use them.
@@ -113,28 +116,41 @@ paths:
 - A class that holds a resource is a context manager: `__enter__` returns `Self`,
   `__exit__` returns `Literal[False]`.
 
-## Docstrings
-- Use Google style, without notes, usage, examples, doctests, module docstrings or math markup.
-  Backtick code and special values (`None`), in error messages too.
-- Follow a closing backtick with a space or punctuation, never a letter: "the `$target`
-  nodes", not "the `$target`s".
-- The summary is imperative ("Load a config file."). Explanations go into a paragraph
-  between the summary and the sections, never into an argument's entry.
-- Document an argument by its name alone, as short as possible: what it is, its unit
-  (in the docstring, not the name), range or format (`(w, x, y, z)`). End it with
-  "Defaults to <default>.", adding its meaning only where not obvious: "Defaults to
-  `None`, in which case it waits forever."
-- A docstring with `Args:`, `Returns:` or `Raises:` documents every argument, even as
-  `user: The user.`. `Returns:` starts with the description; `Raises:` gives each
-  expected error and its condition.
-- Private functions get a docstring only where unclear; a `TypedDict` none that restates
-  its name.
-- A class docstring, where needed, is one sentence of what it is ("A cache that evicts
-  the least recently used entry.", not "Base class for all caches."). Document the
-  constructor in `__init__` ("Initialize the cache."); an error class says which mistake
-  it reports.
-- Attributes and dataclass fields get no docstrings, a public property one line, a
-  public constant one below it.
+## Docstrings and comments
+- Use Google style. State the contract concisely (inputs, result, errors), not the
+  implementation; no notes, usage, examples or doctests, no module docstrings, no math
+  markup. Backtick code and special values (`None`), in error messages too.
+- Follow a closing backtick with a space or punctuation, never a letter: "the
+  `$target` nodes", not "the `$target`s", which Sphinx reads as markup without an end.
+- Write docstrings and comments as plain sentences, without semicolons: split joined
+  clauses into sentences.
+- The summary is imperative with a period ("Load a config file."), alone or followed by
+  every applicable section. What needs explaining goes into a paragraph between the
+  summary and the sections, never into an argument's entry.
+- Document an argument by its name alone, as short as possible: what it is, its unit,
+  range or format (`(w, x, y, z)`), and its default. Put units in the
+  docstring, not the name.
+- End the entry of an argument that has a default with "Defaults to <default>.", adding
+  what it means only where that is not obvious, in one short clause: "The request
+  timeout in seconds. Defaults to `None`, in which case it waits forever."
+- `Returns:` starts with the description; `Raises:` gives each expected error and its
+  condition. Private functions get a docstring only where strictly necessary.
+- Every docstring of a function with arguments documents each of them under `Args:`.
+- Write no docstring that only restates the name, base class or signature, such as
+  `"""The config of an order."""` on `class OrderConfig(TypedDict)`. A docstring with
+  `Args:`, `Returns:` or `Raises:` keeps its summary line and documents every argument,
+  even where the entry only repeats the name (`user: The user.`), for consistency.
+- A class docstring, where one is needed, is one sentence of what it is ("A cache that
+  evicts the least recently used entry.", not "Base class for all caches."). Document
+  the constructor in `__init__` ("Initialize the cache."); an error class says which
+  mistake it reports.
+- Attributes and dataclass fields get no docstrings, a public property one line, a public
+  constant one below it: `DEFAULT_TIMEOUT = 30.0`, then
+  `"""The request timeout in seconds when none is given."""`.
+- Comment only reasons the code cannot show, as a full sentence above the code, except a
+  terse label over a section of a long body or a short identity at the line's end; never
+  mention modules the code is independent of:
+  `# Checked before the first request, so that nothing is sent for an invalid config`
 
 ## Errors
 - Write messages as full sentences that say what is wrong and how to fix it, with wrong

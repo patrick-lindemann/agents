@@ -3,7 +3,10 @@
 ## Communication
 - Open with a short summary of the result, without a heading or "TL;DR", then details.
 - State doubt once, plainly, not as hedging in every sentence.
-- Back a claim that something works with the command that ran and what it printed.
+- Mention a check only when it fails, with the command and what it printed. Leave out
+  checks that passed.
+- Back any other claim that something works with the command that ran and what it
+  printed.
 - Use plain words and the codebase's vocabulary, no coined jargon or metaphors.
 - Write math outside docstrings as plain text: `theta = |phi|`, `sigma^2`.
 - Give options with one recommendation and its reason.
