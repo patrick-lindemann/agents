@@ -1,27 +1,5 @@
 #!/usr/bin/env bash
-# Install the skills, subagent roles and rules of this repository for each coding
-# harness: Claude Code, Codex and Pi.
-#
-# Rules: rules/ is linked to ~/.claude/rules/agents. Claude Code loads it natively: a
-# rule without `paths:` always, one with `paths:` when a matching file is read or edited.
-# Pi reads the same folder through the extension adapters/pi/extensions/rules, which adds the rules
-# to the result of the first matching tool call, as Claude Code does. Codex reads it
-# through adapters/codex/hooks/rules-hook.mjs, which blocks the first edit of a matching file
-# until its rules are delivered.
-#
-# Usage: install.sh [--harness claude,codex,pi]   default: every harness installed
-#
-# The skills always go into ~/.agents/skills, the Agent Skills location. A harness counts
-# as installed when its command is on PATH or its config directory exists; the files of a
-# harness that is not installed are skipped, and its directory is not created.
-#
-# Run once per machine. It installs post-merge and post-rewrite hooks in this checkout
-# that run it again after every pull, rebase pulls included; after a local change to a skill or a role, run it by hand. Links point
-# into this checkout; the generated subagent files are in dist/ (git-ignored). The
-# skills/*/agents/openai.yaml of Codex are generated from the skills' frontmatter and
-# committed, so that a fresh clone is right before the first install.
-#
-# Needs node, which the Codex hooks and the build script run on.
+# Usage: see README.md, section Scripts.
 set -euo pipefail
 
 repo="$(cd "$(dirname "$(realpath "${BASH_SOURCE[0]}")")/.." && pwd)"
