@@ -1,11 +1,5 @@
 #!/usr/bin/env node
-// Generate the per-harness files of this repository; scripts/install.sh calls it.
-//
-//   build.mjs roles <out> [harness ...]   write <out>/<harness>/agents/ from roles/
-//   build.mjs skills                      write skills/*/agents/openai.yaml for Codex
-//   build.mjs unblock <file> <name>       remove the generated block <name> from <file>
-//
-// Node standard library only.
+// Usage: see README.md, section Scripts.
 
 import { existsSync, mkdirSync, readdirSync, readFileSync, rmSync, unlinkSync, writeFileSync } from "node:fs";
 import { homedir } from "node:os";
