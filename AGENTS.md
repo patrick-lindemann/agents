@@ -28,7 +28,8 @@ copies. Nothing in it is specific to one machine.
   it after every pull; run it by hand after changing a skill's frontmatter or a role,
   and commit the `agents/openai.yaml` it changes.
 - Scripts and hooks are Python 3.10 standard library only, run with `python3`. Use no
-  uv in this repository: no `uv run`, no PEP 723 metadata. The Pi extension is the
+  uv in this repository: no `uv run`, no PEP 723 metadata. `pyproject.toml` holds only
+  the ruff and ty settings that pin Python 3.10, and no `[project]`. The Pi extension is the
   only code that is not Python: Pi loads only TypeScript, on its own Node.js.
 - `specs/` (git-ignored): the old rule set and the review that replaced it.
 
