@@ -5,7 +5,9 @@ A project releases in one of two flows; its `AGENTS.md` or `CONTRIBUTING.md` nam
 else a `develop` branch means the pull request flow.
 - **Pull request**: work happens on an integration branch, usually `develop`; `main`
   moves only by merging a pull request from it. The release is a commit
-  `Prepare <version>` on the integration branch, merged as `Release <version>`.
+  `Release <version>` on the integration branch, which the pull request
+  `Release <version>` merges into `main` with a merge commit, never a squash or a
+  rebase, so that both branches keep one history.
 - **Direct**: the project has only `main`; the release is a commit `Release <version>`
   on it.
 

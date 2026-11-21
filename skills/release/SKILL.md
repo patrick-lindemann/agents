@@ -50,9 +50,11 @@ candidates, the files, extra steps, the commit message and who tags.
 
    Done when the files are changed and every change is named in the chat.
 
-5. **Check.** Run every check command of the project's `AGENTS.md`. Fix nothing they
-   report beyond the release files; stop and report a failure. Done when each command and
-   what it printed is in the chat and they pass.
+5. **Check.** Run every check command of the project's `AGENTS.md`, and the release
+   check of its CI where it has one, such as `.github/scripts/check_release.sh`, so that
+   the pull request does not fail on it. Fix nothing they report beyond the release
+   files; stop and report a failure. Done when each command and what it printed is in
+   the chat and they pass.
 
 6. **Commit.** Stage exactly the changed files, check `git diff --cached --name-only`,
    and commit with the project's message, by default the one `release.md` names for the
@@ -62,10 +64,11 @@ candidates, the files, extra steps, the commit message and who tags.
    - **Pull request flow**: push the release branch with `git push`. Write the
      version's changelog section to a file in the scratch directory and open the pull request
      with `gh pr create --base main --head <branch> --title "Release <version>"
-     --body-file <file>`. Give its URL, and tell the user to merge it once CI passes.
-     Where the project's CI does not tag the merge, give the tag commands for after the
-     merge: `git fetch origin`, `git tag v<version> origin/main`,
-     `git push origin v<version>`.
+     --body-file <file>`. Give its URL, and tell the user to merge it with a merge
+     commit once CI passes. Where the project's CI tags the merge, name the workflow and
+     how to see its result: `gh run list --workflow <file>` and
+     `gh release view v<version>`. Otherwise give the tag commands for after the merge:
+     `git fetch origin`, `git tag v<version> origin/main`, `git push origin v<version>`.
    - **Direct flow**: give the commands `git push origin main`,
      `git tag v<version>` and `git push origin v<version>`.
 
