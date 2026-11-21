@@ -54,11 +54,11 @@ tables below map their words to each harness.
 - **Tiers.** A subagent role names a tier (strong, middle, cheap) and an effort, not a
   model. By default every role runs on the session's model at its effort, so the repository
   names no model and needs no update when the models change. To pin a tier on one
-  machine, write the git-ignored `models.local.json` and run `install.sh`:
+  machine, write the git-ignored `models.local.json` and run `install.py`:
   `{"claude": {"cheap": "haiku"}, "pi": {"middle": "openai-codex/gpt-6.1-terra"}}`. A
   tier without an entry stays on the session's model.
 - **Roles.** The skills name their subagents by role. Each role is one file in
-  `~/agents/roles/` with a tier, an effort and tool groups; `scripts/build.mjs` turns it
+  `~/agents/roles/` with a tier, an effort and tool groups; `scripts/install.py` turns it
   into an agent definition per harness:
 
   | Role | Used by | Tier | Effort | Tools |
@@ -83,10 +83,11 @@ tables below map their words to each harness.
 
 ## Installation
 
-On a new machine, clone the repository and run its install script once; it needs node:
+On a new machine, clone the repository and run its install script once; it needs
+Python 3.10 or newer:
 
 ```sh
-git clone git@github.com:patrick-lindemann/agents.git ~/agents && ~/agents/scripts/install.sh
+git clone git@github.com:patrick-lindemann/agents.git ~/agents && ~/agents/scripts/install.py
 ```
 
 The script installs `post-merge` and `post-rewrite` hooks in the checkout that run it
@@ -117,7 +118,7 @@ How rules load:
   shown in the terminal. A write or edit that ran before its rules were loaded is checked
   against them afterwards. Pi subagents load the extension through
   `subagentOnlyExtensions` in their role file.
-- **Codex** runs `adapters/codex/hooks/rules-hook.mjs`: `SessionStart` and `SubagentStart` give
+- **Codex** runs `adapters/codex/hooks/rules_hook.py`: `SessionStart` and `SubagentStart` give
   the rules without `paths:`; `PreToolUse` blocks the first `apply_patch` or shell
   command on a matching file and puts its rules into the context (`additionalContext`, up
   to 12,000 tokens per hook in `hooks.json`; a block reason would be cut at about 2,500).
@@ -133,7 +134,7 @@ How rules load:
 The frontmatter of `SKILL.md` is the only place for a skill's metadata. A user-invoked
 skill carries `disable-model-invocation: true`, which Claude Code and Pi read, and
 `metadata.short-description` is the short text of Codex's skill list. Codex reads the
-invocation policy only from `agents/openai.yaml`, so `install.sh` generates that file
+invocation policy only from `agents/openai.yaml`, so `install.py` generates that file
 with `policy.allow_implicit_invocation: false` for each user-invoked skill. The file is
 committed, so that a fresh clone is right before the first install; commit it when the
 script changes it.

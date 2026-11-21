@@ -5,11 +5,11 @@ link to this repository, so changes here apply everywhere.
 
 ## Install
 
-Requires `node`.
+Requires Python 3.10 or newer, standard library only.
 
 ```sh
 git clone git@github.com:patrick-lindemann/agents.git ~/agents
-~/agents/scripts/install.sh
+~/agents/scripts/install.py
 ```
 
 By default, the script installs for every harness whose command is on `PATH` or whose
@@ -49,7 +49,7 @@ roles, tiers and per-harness details.
 
 ## Scripts
 
-`scripts/install.sh` replaces only links and files it created and skips anything else.
+`scripts/install.py` replaces only links and files it created and skips anything else.
 It:
 
 - Links the skills into `~/.agents/skills/` and `~/.claude/skills/`.
@@ -57,16 +57,13 @@ It:
   and `~/.pi/agent/agents/`, and copies them into `~/.codex/agents/`, since Codex
   cannot start linked agents.
 - Links `rules/` to `~/.claude/rules/agents`. Claude Code loads the rules from there.
-  Pi loads them through `adapters/pi/`. Codex loads them through a hook from
-  `adapters/codex/`, which blocks the first edit of a matching file until its rules are
-  loaded. Codex runs the hook only after it is trusted with `/hooks`.
+  Pi loads them through `adapters/pi/`. Codex loads them through the hook
+  `adapters/codex/hooks/rules_hook.py`, which blocks the first edit of a matching file
+  until its rules are loaded. Codex runs the hook only after it is trusted with `/hooks`.
+- Writes `skills/*/agents/openai.yaml`, which marks user-invoked skills for Codex. These
+  files are committed so that a fresh clone works before the first install. Commit them
+  when they change.
 - Links `~/agents` to the checkout.
 
-`scripts/build.mjs` generates files and is called by `install.sh`:
-
-- `build.mjs roles <out> [harness ...]` writes the role files to
-  `<out>/<harness>/agents/`.
-- `build.mjs skills` writes `skills/*/agents/openai.yaml`, which marks user-invoked
-  skills for Codex. These files are committed so that a fresh clone works before the
-  first install. Commit them when they change.
-- `build.mjs unblock <file> <name>` removes the generated block `<name>` from `<file>`.
+The Pi extension is TypeScript, which Pi runs on its own Node.js. Everything else is
+Python.

@@ -21,14 +21,15 @@ copies. Nothing in it is specific to one machine.
   named after its own terms. `adapters/codex/hooks/`: the Codex hooks that load the
   rules, and the script that registers them. `adapters/pi/extensions/rules/`: the Pi
   extension that loads the rules.
-- `scripts/build.mjs`: generates the role files per harness into `dist/` (git-ignored),
-  and each user-invoked skill's `agents/openai.yaml` for Codex (committed). Node
-  standard library only.
-- `scripts/install.sh [--harness claude,codex,pi]`: links `~/agents` to this checkout,
-  and installs the skills, roles and rule loading for each harness; see
-  `skills/README.md`. The git hooks it installs run it after every pull; run it
-  by hand after changing a skill's frontmatter or a role, and commit the
-  `agents/openai.yaml` it changes.
+- `scripts/install.py [--harness claude,codex,pi]`: links `~/agents` to this checkout,
+  generates the role files per harness into `dist/` (git-ignored) and each user-invoked
+  skill's `agents/openai.yaml` for Codex (committed), and installs the skills, roles and
+  rule loading for each harness; see `skills/README.md`. The git hooks it installs run
+  it after every pull; run it by hand after changing a skill's frontmatter or a role,
+  and commit the `agents/openai.yaml` it changes.
+- Scripts and hooks are Python 3.10 standard library only, run with `python3`. Use no
+  uv in this repository: no `uv run`, no PEP 723 metadata. The Pi extension is the
+  only code that is not Python: Pi loads only TypeScript, on its own Node.js.
 - `specs/` (git-ignored): the old rule set and the review that replaced it.
 
 ## Writing rules
