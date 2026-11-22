@@ -26,7 +26,7 @@ The user, the model or another skill starts these.
 
 | Skill | What it does |
 |---|---|
-| `review` | Harsh, independent review by two reviewer agents that discuss their findings. |
+| `review` | Harsh, independent review by two reviewer agents that split the focus; discussion rounds on request. |
 | `research` | Research papers, released code and documentation, cited, with a recommendation. |
 | `save` | Save the current report, review, research or discussion to a file in `specs/`, when the user asks. |
 
