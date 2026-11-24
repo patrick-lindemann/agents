@@ -86,4 +86,6 @@ task that no file marks, such as a release, go next to the skill that runs it
   nothing a model does by default; keep a line only if it answers an observed failure.
 
 ## Git
-- The agent does not commit unless the user asks; the user pushes.
+- Work directly on `main` in this private repository. Do not create a branch or open a
+  pull request unless the user asks.
+- Commit only when the user asks. Push directly to `main` only when the user asks.
