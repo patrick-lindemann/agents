@@ -52,9 +52,8 @@ _CHECKERS = (
                 "--force-exclude",
                 "--no-cache",
                 "--output-format=concise",
-                "--color=never",
             ),
-            ("format", "--check", "--force-exclude", "--no-cache", "--color=never"),
+            ("format", "--check", "--force-exclude", "--no-cache"),
         ),
         table=re.compile(r"^\s*\[\s*tool\.ruff\s*(?:\]|\.)", re.MULTILINE),
     ),
@@ -189,6 +188,7 @@ def _run_check(check: _Check) -> str:
             result = subprocess.run(
                 check.command,
                 cwd=check.root,
+                env={**os.environ, "NO_COLOR": "1"},
                 stdout=output,
                 stderr=subprocess.STDOUT,
                 timeout=_CHECK_TIMEOUT,
