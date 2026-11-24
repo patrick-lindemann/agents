@@ -18,6 +18,7 @@ Only the user starts these: `/<name>` in Claude Code, `$<name>` in Codex,
 | `handover` | Give the session as a prompt in the chat that a fresh agent can continue from; `file` also saves it. |
 | `spike` | Try a design as a throwaway patch and measure it. |
 | `release` | Prepare a release: version, changelog, checks and commit, then the release pull request or the push and tag commands. |
+| `review-structure` | Strict review of the structure and practice of a codebase or folder, with proposed rules. |
 | `setup` | Align a project's `AGENTS.md`, `CLAUDE.md` and tool settings with the shared rules; on a project already set up, bring them up to date. |
 
 ## Model-invoked
@@ -26,7 +27,8 @@ The user, the model or another skill starts these.
 
 | Skill | What it does |
 |---|---|
-| `review` | Harsh, independent review by two reviewer agents that split the focus; discussion rounds on request. |
+| `review-code` | Thermo-nuclear review of a code change: one reviewer for correctness and security, one for structure. |
+| `review-spec` | Harsh, independent review of a spec, workplan, benchmark, report or research by one reviewer. |
 | `research` | Research papers, released code and documentation, cited, with a recommendation. |
 | `save` | Save the current report, review, research or discussion to a file in `specs/`, when the user asks. |
 
@@ -63,8 +65,7 @@ tables below map their words to each harness.
 
   | Role | Used by | Tier | Effort | Tools |
   |---|---|---|---|---|
-  | `reviewer-strong` | `review`, and the stage review in `implement` | strong | high | read, search, commands, web; no edits |
-  | `reviewer-middle` | `review` | middle | high | read, search, commands, web; no edits |
+  | `reviewer-strong` | `review-code`, `review-spec`, `review-structure`, and the stage review in `implement` | strong | high | read, search, commands, web; no edits |
   | `implementer` | `implement` | strong | medium | all |
   | `fact-finder` | `spec`, any skill | middle | medium | read, search |
   | `locator` | any skill | cheap | low | read, search |

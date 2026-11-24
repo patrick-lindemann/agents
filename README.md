@@ -61,11 +61,12 @@ Invoked with `/<name>` in Claude Code, `$<name>` in Codex and `/skill:<name>` in
 | `revise` | Turn review notes into fixes and rules |
 | `spike` | Try a design as a throwaway patch and measure it |
 | `release` | Prepare a release |
+| `review-structure` | Review the structure of a codebase or folder |
 | `setup` | Set up or update a project for the rules |
 | `explain` | Explain an answer, plan, code or session |
 | `handover` | Write a prompt for a fresh agent to continue from |
 
-`review`, `research` and `save` can also be invoked by the model. Subagent roles are
+`review-code`, `review-spec`, `research` and `save` can also be invoked by the model. Subagent roles are
 defined in `roles/`; see [skills/README.md](skills/README.md) for
 roles, tiers and per-harness details.
 

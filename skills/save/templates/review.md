@@ -3,8 +3,8 @@
 State of <date>. A review of <material, with paths and commit>, with the user's
 decisions on it of <date>. <What changed as a result, or "No file was changed.">
 
-<How the review was done: the reviewers, their tiers, effort and focus, the rounds of
-discussion if any, and what the coordinating agent checked.>
+<How the review was done: the skill, the reviewers and their rubric or focus, and what
+the coordinating agent checked.>
 
 Verdict: <two or three sentences>.
 
@@ -21,16 +21,8 @@ Evidence is marked [run] (a command was run), [read] (read in a source) or
 
 | ID | Severity | Location | Problem | Evidence | Proposal | State | Response |
 |---|---|---|---|---|---|---|---|
-| A1 | blocker | | | [read] | | confirmed | |
-
-### Disputed
-
-<Each disputed finding with both sides and the recommendation.>
+| C1 | blocker | | | [read] | | confirmed | |
 
 ### Rejected
 
 <Each rejected finding with the reason.>
-
-## What holds up
-
-<What the reviewers checked and found correct.>

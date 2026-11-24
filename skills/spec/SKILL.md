@@ -94,8 +94,8 @@ area the work touches.
    Done when the files exist, every decision in them has a date, and every spec file or
    stage concept has its criteria.
 
-7. **Check.** For a small spec, run the skill "review", naming the spec,
-   `rounds=1`, and the focus "questions an implementer would still have to ask, false
+7. **Check.** For a small spec, run the skill "review-spec", naming the spec
+   and the focus "questions an implementer would still have to ask, false
    statements about the code, and criteria that cannot be shown by a command". For a
    medium or big spec, offer that review with the question tool, with the focus
    "questions an implementer would still have to ask", and run it if the user accepts.

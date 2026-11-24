@@ -53,7 +53,7 @@ Read `~/agents/rules/shared/common.md`, and the project's
    commit, otherwise uncommitted. Add the risks and what is not in the plan. Done when
    the file exists: `specs/<topic>/workplan.md`.
 
-5. **Check.** Offer a review with the question tool. If the user accepts, run the skill "review",
+5. **Check.** Offer a review with the question tool. If the user accepts, run the skill "review-spec",
    naming the workplan and the focus "do the packages reach each stage's goal, and can
    every criterion be shown by a command". Take the clear findings yourself and name
    them; ask the rest with the question tool. Done when the user declines, or its
