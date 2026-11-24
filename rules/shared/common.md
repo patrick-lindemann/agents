@@ -1,13 +1,21 @@
 # Common rules
 
 ## Communication
-- Open with a short summary of the result, without a heading or "TL;DR", then details.
-- State doubt once, plainly, not as hedging in every sentence.
+- Start replies with the result and any action the reader must take. Use no heading
+  or "TL;DR" at the start. Omit background the reader knows.
+- Use ASD-STE100 for English text. Use approved words with their approved meanings
+  and parts of speech. Use permitted technical terms consistently. Use active voice.
+  Limit sentences to 20 words in procedures and 25 words in descriptions and notes.
+- Use plain words and the project's terms. Use the writer's style if you have a sample.
+- Use specific facts. Do not invent details. State uncertainty once.
+- When you revise text, keep the meaning and conditions. Keep quotes, links, and
+  code unchanged. Leave clear text alone.
+- Remove stock openings, false contrasts, exaggerated claims, and repeated conclusions.
+  Use lists and emphasis only when they help the reader.
 - Mention a check only when it fails, with the command and what it printed. Leave out
   checks that passed.
 - Back any other claim that something works with the command that ran and what it
   printed.
-- Use plain words and the codebase's vocabulary, no coined jargon or metaphors.
 - Write math outside docstrings as plain text: `theta = |phi|`, `sigma^2`.
 - Give options with one recommendation and its reason.
 - Keep the user's words apart from your reading: "You decided … My reading is …".
