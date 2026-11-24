@@ -11,6 +11,7 @@ import sys
 from collections.abc import Mapping, Sequence
 from dataclasses import dataclass
 from pathlib import Path
+from tempfile import NamedTemporaryFile
 
 _HARNESSES = ("claude", "codex", "pi")
 _REPO_DIR = Path(__file__).resolve().parent.parent
@@ -46,6 +47,8 @@ _PI_TOOLS = {
 _PI_RULES_EXTENSION_FILE = _CONFIG_DIRS["pi"] / "extensions" / "agents-rules" / "index.ts"
 
 _CODEX_HOOK_COMMAND = 'python3 "$HOME/agents/adapters/codex/hooks/rules_hook.py"'
+_CHECK_HOOK_COMMAND = 'python3 "$HOME/agents/adapters/post_tool_checks.py"'
+_CHECK_HOOK_MATCHERS = {"claude": "^(Edit|MultiEdit|Write)$", "codex": "^apply_patch$"}
 # Generated files start with a marker, so that only they are replaced or removed. They
 # are recognized by its prefix, so that other wording after it still counts.
 _ROLE_COPY_MARKER = "# Generated from ~/agents/roles by scripts/install.py, edit there."
@@ -77,7 +80,7 @@ def get_args() -> Arguments:
         The parsed arguments.
     """
     parser = argparse.ArgumentParser(
-        description=("Install the skills, subagent roles and rules of this repository for Claude Code, Codex and Pi.")
+        description="Install skills, roles, rules and post-edit checks for Claude Code, Codex and Pi."
     )
     parser.add_argument(
         "--harness",
@@ -114,19 +117,24 @@ def main() -> None:
     if "claude" in selected:
         _link_skills(claude_dir / "skills")
         _link_roles("claude", claude_dir / "agents")
+        _add_post_edit_hook(claude_dir / "settings.json", "claude")
     # The Agent Skills location, which Codex and Pi read.
     _link_skills(_HOME_DIR / ".agents" / "skills")
     if "codex" in selected:
         _copy_codex_roles(codex_dir / "agents")
         _remove_block(codex_dir / "AGENTS.md", _BLOCK_NAME)
-        if _add_codex_hooks(codex_dir / "hooks.json"):
-            print("codex: run /hooks once to trust the new rules hooks")
+        hooks_file = codex_dir / "hooks.json"
+        rules_changed = _add_codex_hooks(hooks_file)
+        checks_changed = _add_post_edit_hook(hooks_file, "codex")
+        if rules_changed or checks_changed:
+            print("codex: run /hooks to trust the new hooks")
     if "pi" in selected:
         _link_roles("pi", pi_dir / "agents")
         _remove_block(pi_dir / "AGENTS.md", _BLOCK_NAME)
         extensions_dir = pi_dir / "extensions"
         extensions_dir.mkdir(parents=True, exist_ok=True)
         _link(_REPO_DIR / "adapters" / "pi" / "extensions" / "rules", extensions_dir / "agents-rules")
+        _link(_REPO_DIR / "adapters" / "pi" / "extensions" / "checks", extensions_dir / "agents-checks")
 
 
 def _parse_harnesses(text: str) -> list[str]:
@@ -296,6 +304,34 @@ def _add_codex_hooks(hooks_file: Path) -> bool:
     if is_changed:
         hooks_file.write_text(f"{json.dumps(config, indent=2, ensure_ascii=False)}\n", encoding="utf-8")
     return is_changed
+
+
+def _add_post_edit_hook(hooks_file: Path, harness: str) -> bool:
+    try:
+        config = json.loads(hooks_file.read_text(encoding="utf-8"))
+    except FileNotFoundError:
+        config = {}
+    groups = config.setdefault("hooks", {}).setdefault("PostToolUse", [])
+    matcher = _CHECK_HOOK_MATCHERS[harness]
+    command = f"{_CHECK_HOOK_COMMAND} {harness}"
+    if any(
+        group.get("matcher") == matcher and any(hook.get("command") == command for hook in group.get("hooks", []))
+        for group in groups
+    ):
+        return False
+    groups.append({"matcher": matcher, "hooks": [{"type": "command", "command": command, "timeout": 10}]})
+    target = hooks_file.resolve()
+    text = f"{json.dumps(config, indent=2, ensure_ascii=False)}\n"
+    with NamedTemporaryFile(mode="w", encoding="utf-8", dir=target.parent, delete=False) as stream:
+        temporary_path = Path(stream.name)
+        try:
+            stream.write(text)
+            stream.close()
+            temporary_path.replace(target)
+        finally:
+            temporary_path.unlink(missing_ok=True)
+    print(f"add PostToolUse hook in {hooks_file}")
+    return True
 
 
 def _is_rules_hook_group(group: Mapping[str, object], mode: str) -> bool:

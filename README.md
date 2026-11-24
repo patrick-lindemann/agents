@@ -20,6 +20,28 @@ frontmatter; rule changes need no reinstall. Roles run on the session's model; t
 tier to a model on one machine, add it to the git-ignored `models.local.json`, for
 example `{"claude": {"cheap": "haiku"}}`, and rerun the script.
 
+## Post-edit checks
+
+Rerun `~/agents/scripts/install.py` to register the checks. In Codex, trust the new
+hook with `/hooks`. Restart the harnesses, or use `/reload` in Pi.
+
+- Pi batches files from successful `edit` and `write` calls in trusted workspaces.
+  It checks them as the agent finishes. Diagnostics can trigger one extra response.
+- Claude Code checks after each `Edit`, `MultiEdit`, or `Write` call.
+- Codex checks the files from each successful `apply_patch` call.
+
+The checks do not fix files, install tools, or check shell edits. Each tool uses its
+nearest config directory within the workspace:
+
+- Biome checks TypeScript and JavaScript if it finds `biome.json` or `biome.jsonc`.
+- Ruff checks Python lint and formatting if it finds `ruff.toml`, `.ruff.toml`, or
+  a `[tool.ruff]` table in `pyproject.toml`.
+- ty checks Python types if it finds `ty.toml` or a `[tool.ty]` table in `pyproject.toml`.
+
+Claude Code and Codex look for tools on `PATH`. Pi first looks beside the config in
+`node_modules/.bin` or `.venv/bin`, then on `PATH`. Keep your full project checks for
+issues that span files.
+
 ## Rules
 
 Rules are in `rules/shared/` and `rules/python/`. `shared/common.md` loads in every
@@ -65,5 +87,4 @@ It:
   when they change.
 - Links `~/agents` to the checkout.
 
-The Pi extension is TypeScript, which Pi runs on its own Node.js. Everything else is
-Python.
+The Pi extensions use TypeScript and run on Pi's Node.js. Everything else is Python.

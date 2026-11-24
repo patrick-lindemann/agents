@@ -19,18 +19,18 @@ copies. Nothing in it is specific to one machine.
   `skills/README.md`. Without it, every role runs on the session's model.
 - `adapters/`: the code that connects each harness to the rules, one folder per harness
   named after its own terms. `adapters/codex/hooks/`: the Codex hooks that load the
-  rules, and the script that registers them. `adapters/pi/extensions/rules/`: the Pi
-  extension that loads the rules.
+  rules. `adapters/pi/extensions/rules/` loads the rules in Pi.
+  `adapters/post_tool_checks.py` runs checks for all three harnesses.
 - `scripts/install.py [--harness claude,codex,pi]`: links `~/agents` to this checkout,
   generates the role files per harness into `dist/` (git-ignored) and each user-invoked
   skill's `agents/openai.yaml` for Codex (committed), and installs the skills, roles and
-  rule loading for each harness; see `skills/README.md`. The git hooks it installs run
-  it after every pull; run it by hand after changing a skill's frontmatter or a role,
-  and commit the `agents/openai.yaml` it changes.
+  rule loading and post-edit checks for each harness. See `skills/README.md`.
+  The git hooks it installs run it after every pull. Run it by hand after changing a
+  skill's frontmatter or a role, and commit the `agents/openai.yaml` it changes.
 - Scripts and hooks are Python 3.10 standard library only, run with `python3`. Use no
   uv in this repository: no `uv run`, no PEP 723 metadata. `pyproject.toml` holds only
-  the ruff and ty settings that pin Python 3.10, and no `[project]`. The Pi extension is the
-  only code that is not Python: Pi loads only TypeScript, on its own Node.js.
+  the ruff and ty settings that pin Python 3.10, and no `[project]`. Pi extensions use
+  TypeScript and run on Pi's Node.js.
 - `specs/` (git-ignored): the old rule set and the review that replaced it.
 
 ## Writing rules

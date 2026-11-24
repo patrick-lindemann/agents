@@ -4,6 +4,14 @@ paths:
 ---
 # Code
 
+## Naming and control flow
+- Prefer verb-first names for functions and methods, including private and test helpers,
+  except when a different conventional name is clearer or an external API requires it.
+  Choose the verb for the behavior rather than prefixing every name with `get`.
+- In languages with optional control-flow braces, use multiline braced bodies for
+  `if`, `else` and loops, including guards and generated code. Keep guard clauses and
+  do not replace them with ternaries to avoid braces.
+
 ## Tests and checks
 - Test changed behavior; a bug fix gets a test that fails without it.
 - `src/` is the specification: "fix the tests" means changing the tests. Change a test
