@@ -19,13 +19,13 @@ copies. Nothing in it is specific to one machine.
   `skills/README.md`. Without it, every role runs on the session's model.
 - `adapters/`: the code that connects each harness to the rules, one folder per harness
   named after its own terms. `adapters/codex/hooks/`: the Codex hooks that load the
-  rules, and the script that registers them. `adapters/pi/extensions/rules/`: the Pi
-  extension that loads the rules.
+  rules, and the script that registers them. `adapters/pi/extensions/rules/` loads the
+  rules. `adapters/checks.mjs` runs the shared post-edit checks.
 - `scripts/build.mjs`: generates the role files per harness into `dist/` (git-ignored),
   and each user-invoked skill's `agents/openai.yaml` for Codex (committed). Node
   standard library only.
 - `scripts/install.sh [--harness claude,codex,pi]`: links `~/agents` to this checkout,
-  and installs the skills, roles and rule loading for each harness; see
+  and installs skills, roles, rules and post-edit checks for each harness. See
   `skills/README.md`. The git hooks it installs run it after every pull; run it
   by hand after changing a skill's frontmatter or a role, and commit the
   `agents/openai.yaml` it changes.

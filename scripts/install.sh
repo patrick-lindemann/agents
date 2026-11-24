@@ -1,6 +1,5 @@
 #!/usr/bin/env bash
-# Install the skills, subagent roles and rules of this repository for each coding
-# harness: Claude Code, Codex and Pi.
+# Install skills, subagent roles, rules and post-edit checks for Claude Code, Codex and Pi.
 #
 # Rules: rules/ is linked to ~/.claude/rules/agents. Claude Code loads it natively: a
 # rule without `paths:` always, one with `paths:` when a matching file is read or edited.
@@ -188,6 +187,7 @@ fi
 if wants claude; then
     link_skills "$claude_dir/skills"
     link_roles claude "$claude_dir/agents"
+    node "$repo/adapters/register-check-hook.mjs" claude "$claude_dir/settings.json"
 fi
 
 # The Agent Skills location, which Codex and Pi read.
@@ -196,8 +196,13 @@ link_skills "$HOME/.agents/skills"
 if wants codex; then
     copy_codex_roles "$codex_dir/agents"
     node "$repo/scripts/build.mjs" unblock "$codex_dir/AGENTS.md" agents-rules
-    if node "$repo/adapters/codex/hooks/add-hooks.mjs" "$codex_dir/hooks.json" | grep .; then
-        echo "codex: run /hooks once to trust the new rules hooks"
+    codex_hook_updates="$(
+        node "$repo/adapters/codex/hooks/add-hooks.mjs" "$codex_dir/hooks.json" &&
+        node "$repo/adapters/register-check-hook.mjs" codex "$codex_dir/hooks.json"
+    )"
+    if [[ -n "$codex_hook_updates" ]]; then
+        printf '%s\n' "$codex_hook_updates"
+        echo "codex: run /hooks to trust the new hooks"
     fi
 fi
 
@@ -206,4 +211,5 @@ if wants pi; then
     node "$repo/scripts/build.mjs" unblock "$pi_dir/AGENTS.md" agents-rules
     mkdir -p "$pi_dir/extensions"
     link "$repo/adapters/pi/extensions/rules" "$pi_dir/extensions/agents-rules"
+    link "$repo/adapters/pi/extensions/checks" "$pi_dir/extensions/agents-checks"
 fi
